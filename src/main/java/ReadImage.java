@@ -56,9 +56,52 @@ public class ReadImage
               An energy of 100 would translate based on maximum and minimum energy
               If maximum energy is 1,000,000, 100 is small, but if maximum is 200, 100 is big
               Brightness = (energy - minEnergy) / (maxEnergy - minEnergy) * 255
-              Ex. energy = 100, minEnergy = 0, maxEnergy = 200 --> ((100 - 0)/200) * 255 = 255 / 2 = 127
+              Ex. energy = 100, minEnergy = 0, maxEnergy = 200 --> ((100 - 0)/(200 - 0) * 255 = 255 / 2 = 127
               Color color = new Color(Brightness, Brightness, Brightness)
+              Display the 2D array as an image, borders are white
+
+          List of seams:
+             lower energy is the least important - red lines on wikipedia page are teh seams,
+             none of which go through person or tower - each seam is 1 pixel wide
+                    To change the width of the picture, use vertical seams
+                    To change the height of the picture, use horizontal seams
+             Look for the lowest energy pixels - a seam goes from top -> bottom
+             it doesn't need to be that the x's are exactly the same, it might zigzag all the way to the bottom
+
+             Every pixel has an energy - leaving border out of this:
+             top row is   5   10    1    5    5    10
+             second row   1  300  200  150   50    35
+
+             Using dynamic programming - minimum vertical energy of the second row:
+             top row    = the energy of pixels
+             second row = the energy of the pixel from the second row + the smallest energy
+             from the 3 pixels above it
+
+             top row 1 points to 300, 200, 150
+             The 1 in second row is minimum of 1 + 5, 1 + 10 = 6
+             The 300 is the minimum of 300 + 5, 300 + 10, 300 + 1 = 301
+             The 200 becomes 201
+             The 150 becomes 151
+             The  50 becomes 55
+             The  35 becomes 40
+
+             Once you do all rows, you go bottom up.
+             The bottom row contains the total minimum energy needed to get to that pixel.
+             Generate seam by going up to the smallest of the three branching pixels above it
+
+             To make the image smaller, can remove the path with the lowest energies
+             and should be removable without distorting image
+
+             This is for the vertical seams, and for the horizontal seams - 3 pixels left to right
+
+             Once you remove a seam, it changes everything else and some of your image has to be recomputed
+
+             The algorithm can become inefficient
+
+             -- USE graph paper to plan out utilizing the algorithm
            */
+
+
         } catch (IOException e)
         {
             throw new RuntimeException(e);
