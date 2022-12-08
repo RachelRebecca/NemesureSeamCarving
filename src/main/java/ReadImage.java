@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ReadImage
 {
@@ -11,11 +12,11 @@ public class ReadImage
 
     public static void main(String[] args)
     {
-        try
+        try (InputStream seamImage = ReadImage.class.getResourceAsStream("/seam.jpg") )
         {
             // BufferedImage is a 2D array of pixels
 
-            BufferedImage image = ImageIO.read(new File(args[0]));
+            BufferedImage image = ImageIO.read(seamImage);
             Color color = new Color(image.getRGB(2, 4));
             System.out.println(color.getBlue());
             System.out.println(color.getRed());
