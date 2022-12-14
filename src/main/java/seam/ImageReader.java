@@ -21,11 +21,11 @@ public class ImageReader
             imageWidth = image.getWidth();
             imageHeight = image.getHeight();
             pixels = new Pixel[imageWidth][imageHeight];
-            for (int row = 0; row < imageWidth; row++)
+            for (int x = 0; x < imageWidth; x++)
             {
-                for (int col = 0; col < imageHeight; col++)
+                for (int y = 0; y < imageHeight; y++)
                 {
-                    pixels[row][col] = new Pixel(image.getRGB(row, col));
+                    pixels[x][y] = new Pixel(image.getRGB(x, y));
                 }
             }
 
@@ -40,15 +40,16 @@ public class ImageReader
 
     public BufferedImage copyOriginalImage()
     {
-        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight,
+                BufferedImage.TYPE_INT_RGB);
 
         Color color;
-        for (int xCoord = 0; xCoord < imageWidth; xCoord++)
+        for (int x = 0; x < imageWidth; x++)
         {
-            for (int yCoord = 0; yCoord < imageHeight; yCoord++)
+            for (int y = 0; y < imageHeight; y++)
             {
-                color = pixels[xCoord][yCoord].getColor();
-                image.setRGB(xCoord, yCoord, color.getRGB());  // saves pixel
+                color = pixels[x][y].getColor();
+                image.setRGB(x, y, color.getRGB());  // saves pixel
             }
         }
         return image;
@@ -56,17 +57,22 @@ public class ImageReader
 
     private void calculateEnergy()
     {
-        for (int i = 1; i < imageWidth - 1; i++)
+        for (int x = 1; x < imageWidth - 1; x++)
         {
-            for (int j = 1; j < imageHeight - 1; j++)
+            for (int y = 1; y < imageHeight - 1; y++)
             {
-                Pixel top = pixels[i][j + 1];
-                Pixel bottom = pixels[i][j - 1];
-                Pixel left = pixels[i - 1][j];
-                Pixel right = pixels[i + 1][j];
-                int energy = (int) (Math.pow((top.getColor().getRed() - bottom.getColor().getRed()), 2) + Math.pow((top.getColor().getGreen() - bottom.getColor().getGreen()), 2) + Math.pow((top.getColor().getBlue() - bottom.getColor().getBlue()), 2) + Math.pow((left.getColor().getRed() - right.getColor().getRed()), 2) + Math.pow((left.getColor().getGreen() - right.getColor().getGreen()), 2) + Math.pow((left.getColor().getBlue() - right.getColor().getBlue()), 2));
+                Pixel top = pixels[x][y + 1];
+                Pixel bottom = pixels[x][y - 1];
+                Pixel left = pixels[x - 1][y];
+                Pixel right = pixels[x + 1][y];
+                int energy = (int) (Math.pow((top.getColor().getRed() - bottom.getColor().getRed()), 2)
+                                + Math.pow((top.getColor().getGreen() - bottom.getColor().getGreen()), 2)
+                                + Math.pow((top.getColor().getBlue() - bottom.getColor().getBlue()), 2)
+                                + Math.pow((left.getColor().getRed() - right.getColor().getRed()), 2)
+                                + Math.pow((left.getColor().getGreen() - right.getColor().getGreen()), 2)
+                                + Math.pow((left.getColor().getBlue() - right.getColor().getBlue()), 2));
 
-                pixels[i][j].setEnergy(energy);
+                pixels[x][y].setEnergy(energy);
 
                 if (energy < minEnergy)
                 {
@@ -80,13 +86,14 @@ public class ImageReader
     {
         int maxEnergy = 255 * 255 * 6;
 
-        for (int xCoord = 0; xCoord < imageWidth; xCoord++)
+        for (int x = 0; x < imageWidth; x++)
         {
-            for (int yCoord = 0; yCoord < imageHeight; yCoord++)
+            for (int y = 0; y < imageHeight; y++)
             {
-                Pixel pixel = pixels[xCoord][yCoord];
+                Pixel pixel = pixels[x][y];
 
-                double brightness = ((pixel.getEnergy() - minEnergy) * 255.0) / (maxEnergy - minEnergy);
+                double brightness = ((pixel.getEnergy() - minEnergy) * 255.0)
+                        / (maxEnergy - minEnergy);
 
                 pixel.setBrightness((int) brightness);
             }
@@ -95,16 +102,17 @@ public class ImageReader
 
     public BufferedImage generateGreyscaleImage()
     {
-        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight,
+                BufferedImage.TYPE_INT_RGB);
 
         Color color;
-        for (int xCoord = 0; xCoord < imageWidth; xCoord++)
+        for (int x = 0; x < imageWidth; x++)
         {
-            for (int yCoord = 0; yCoord < imageHeight; yCoord++)
+            for (int y = 0; y < imageHeight; y++)
             {
-                int brightness = pixels[xCoord][yCoord].getBrightness();
+                int brightness = pixels[x][y].getBrightness();
                 color = new Color(brightness, brightness, brightness);
-                image.setRGB(xCoord, yCoord, color.getRGB());  // saves pixel
+                image.setRGB(x, y, color.getRGB());  // saves pixel
             }
         }
         return image;
