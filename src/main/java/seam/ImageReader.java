@@ -30,8 +30,6 @@ public class ImageReader
             }
 
             calculateEnergy();
-
-            calculateBrightness();
         } catch (Exception exception)
         {
             System.out.println(exception.getMessage());
@@ -67,11 +65,11 @@ public class ImageReader
                 Color right = (pixels[x + 1][y]).getColor();
 
                 int energy = (int) (Math.pow((top.getRed() - bottom.getRed()), 2)
-                                + Math.pow((top.getGreen() - bottom.getGreen()), 2)
-                                + Math.pow((top.getBlue() - bottom.getBlue()), 2)
-                                + Math.pow((left.getRed() - right.getRed()), 2)
-                                + Math.pow((left.getGreen() - right.getGreen()), 2)
-                                + Math.pow((left.getBlue() - right.getBlue()), 2));
+                        + Math.pow((top.getGreen() - bottom.getGreen()), 2)
+                        + Math.pow((top.getBlue() - bottom.getBlue()), 2)
+                        + Math.pow((left.getRed() - right.getRed()), 2)
+                        + Math.pow((left.getGreen() - right.getGreen()), 2)
+                        + Math.pow((left.getBlue() - right.getBlue()), 2));
 
                 pixels[x][y].setEnergy(energy);
 
@@ -83,22 +81,14 @@ public class ImageReader
         }
     }
 
-    private void calculateBrightness()
+    private int calculateBrightness(Pixel pixel)
     {
         int maxEnergy = 255 * 255 * 6;
 
-        for (int x = 0; x < imageWidth; x++)
-        {
-            for (int y = 0; y < imageHeight; y++)
-            {
-                Pixel pixel = pixels[x][y];
+        double brightness = ((pixel.getEnergy() - minEnergy) * 255.0)
+                / (maxEnergy - minEnergy);
 
-                double brightness = ((pixel.getEnergy() - minEnergy) * 255.0)
-                        / (maxEnergy - minEnergy);
-
-                pixel.setBrightness((int) brightness);
-            }
-        }
+        return (int) brightness;
     }
 
     public BufferedImage generateGreyscaleImage()
@@ -111,7 +101,7 @@ public class ImageReader
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                int brightness = pixels[x][y].getBrightness();
+                int brightness = calculateBrightness(pixels[x][y]);
                 color = new Color(brightness, brightness, brightness);
                 image.setRGB(x, y, color.getRGB());  // saves pixel
             }
