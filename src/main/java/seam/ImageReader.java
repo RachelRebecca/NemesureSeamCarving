@@ -10,6 +10,7 @@ public class ImageReader
     private int imageWidth;
     private int imageHeight;
     private Pixel[][] pixels;
+    private int maxEnergy = 0;
     private int minEnergy = 255 * 255 * 6;
 
     public ImageReader(String imagePath)
@@ -77,14 +78,16 @@ public class ImageReader
                 {
                     minEnergy = energy;
                 }
+                if (energy > maxEnergy)
+                {
+                    maxEnergy = energy;
+                }
             }
         }
     }
 
     private int calculateBrightness(Pixel pixel)
     {
-        int maxEnergy = 255 * 255 * 6;
-
         double brightness = ((pixel.getEnergy() - minEnergy) * 255.0)
                 / (maxEnergy - minEnergy);
 
@@ -101,7 +104,7 @@ public class ImageReader
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                int brightness = calculateBrightness(pixels[x][y]);
+                int brightness = Math.min(calculateBrightness(pixels[x][y]), 255);
                 color = new Color(brightness, brightness, brightness);
                 image.setRGB(x, y, color.getRGB());  // saves pixel
             }
