@@ -61,16 +61,17 @@ public class ImageReader
         {
             for (int y = 1; y < imageHeight - 1; y++)
             {
-                Pixel top = pixels[x][y + 1];
-                Pixel bottom = pixels[x][y - 1];
-                Pixel left = pixels[x - 1][y];
-                Pixel right = pixels[x + 1][y];
-                int energy = (int) (Math.pow((top.getColor().getRed() - bottom.getColor().getRed()), 2)
-                                + Math.pow((top.getColor().getGreen() - bottom.getColor().getGreen()), 2)
-                                + Math.pow((top.getColor().getBlue() - bottom.getColor().getBlue()), 2)
-                                + Math.pow((left.getColor().getRed() - right.getColor().getRed()), 2)
-                                + Math.pow((left.getColor().getGreen() - right.getColor().getGreen()), 2)
-                                + Math.pow((left.getColor().getBlue() - right.getColor().getBlue()), 2));
+                Color top = (pixels[x][y + 1]).getColor();
+                Color bottom = (pixels[x][y - 1]).getColor();
+                Color left = (pixels[x - 1][y]).getColor();
+                Color right = (pixels[x + 1][y]).getColor();
+
+                int energy = (int) (Math.pow((top.getRed() - bottom.getRed()), 2)
+                                + Math.pow((top.getGreen() - bottom.getGreen()), 2)
+                                + Math.pow((top.getBlue() - bottom.getBlue()), 2)
+                                + Math.pow((left.getRed() - right.getRed()), 2)
+                                + Math.pow((left.getGreen() - right.getGreen()), 2)
+                                + Math.pow((left.getBlue() - right.getBlue()), 2));
 
                 pixels[x][y].setEnergy(energy);
 
