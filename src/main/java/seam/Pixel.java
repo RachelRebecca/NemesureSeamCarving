@@ -5,7 +5,7 @@ import java.awt.*;
 public class Pixel
 {
     private Color color;
-    private int energy;
+    private double energy;
 
     public Pixel(int rgb)
     {
@@ -18,12 +18,12 @@ public class Pixel
         return this.color;
     }
 
-    public int getEnergy()
+    public double getEnergy()
     {
         return this.energy;
     }
 
-    public void setEnergy(int energy)
+    public void setEnergy(double energy)
     {
         this.energy = energy;
     }

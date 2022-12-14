@@ -10,8 +10,8 @@ public class ImageReader
     private int imageWidth;
     private int imageHeight;
     private Pixel[][] pixels;
-    private int maxEnergy = 0;
-    private int minEnergy = 255 * 255 * 6;
+    private double maxEnergy = 0;
+    private double minEnergy = 255 * 255 * 6;
 
     public ImageReader(String imagePath)
     {
@@ -65,7 +65,7 @@ public class ImageReader
                 Color left = (pixels[x - 1][y]).getColor();
                 Color right = (pixels[x + 1][y]).getColor();
 
-                int energy = (int) (Math.pow((top.getRed() - bottom.getRed()), 2)
+                double energy = (Math.pow((top.getRed() - bottom.getRed()), 2)
                         + Math.pow((top.getGreen() - bottom.getGreen()), 2)
                         + Math.pow((top.getBlue() - bottom.getBlue()), 2)
                         + Math.pow((left.getRed() - right.getRed()), 2)
