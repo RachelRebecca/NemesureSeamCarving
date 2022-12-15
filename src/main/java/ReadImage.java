@@ -111,8 +111,8 @@ public class ReadImage
              To remove seam = new array[width - 1][height]
              Can loop through arrays and skip over value with seam
 
-             [Another idea: two copies per row - the horizontal version up until the seam and after the seam
-             and can use System.arraycopy]
+             [Another idea: two copies per row - the horizontal version
+             up until the seam and after the seam and can use System.arraycopy]
 
              Original image 100x100, to be resized to 90x90 then result
              is 10 vertical seams and 10 horizontal seams
