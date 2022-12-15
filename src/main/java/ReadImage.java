@@ -93,13 +93,36 @@ public class ReadImage
              To make the image smaller, can remove the path with the lowest energies
              and should be removable without distorting image
 
-             This is for the vertical seams, and for the horizontal seams - 3 pixels left to right
+             This is for the vertical seams,
+             for the horizontal seams - 3 pixels left to right
+             --> the three pixels touching the pixel in the column before it
+             --> the border only has two values to the left
 
              Once you remove a seam, it changes everything else and some of your image has to be recomputed
 
              The algorithm can become inefficient
 
              -- USE graph paper to plan out utilizing the algorithm
+
+             Seam: (0, 1), (1, 1), (2, 1)
+             A seam is an array of ints [0, 1, 1]
+             For vertical seams, it's index 0 = 0, index 1 = 1, index 2 = 1
+
+             To remove seam = new array[width - 1][height]
+             Can loop through arrays and skip over value with seam
+
+             [Another idea: two copies per row - the horizontal version up until the seam and after the seam
+             and can use System.arraycopy]
+
+             Original image 100x100, to be resized to 90x90 then result
+             is 10 vertical seams and 10 horizontal seams
+             --> Recalculate all energy values and continue from there
+             Repeat x amount of times, and you've removed all seams
+
+             To remove the horizontal seam - flip rows and cols in for loop
+
+             Maybe class to determine the lowest seam given 2D energy array
+             SeamRemover class takes in 2D array and seam and returns a new 2D array
            */
 
 
