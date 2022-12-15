@@ -65,12 +65,12 @@ public class ImageReader
                 Color left = (pixels[x - 1][y]).getColor();
                 Color right = (pixels[x + 1][y]).getColor();
 
-                double energy = (Math.pow((top.getRed() - bottom.getRed()), 2)
-                        + Math.pow((top.getGreen() - bottom.getGreen()), 2)
-                        + Math.pow((top.getBlue() - bottom.getBlue()), 2)
-                        + Math.pow((left.getRed() - right.getRed()), 2)
-                        + Math.pow((left.getGreen() - right.getGreen()), 2)
-                        + Math.pow((left.getBlue() - right.getBlue()), 2));
+                double energy = ((top.getRed() - bottom.getRed()) * (top.getRed() - bottom.getRed()))
+                        + ((top.getGreen() - bottom.getGreen()) * (top.getGreen() - bottom.getGreen()))
+                        + ((top.getBlue() - bottom.getBlue()) * (top.getBlue() - bottom.getBlue()))
+                        + ((left.getRed() - right.getRed()) * (left.getRed() - right.getRed()))
+                        + ((left.getGreen() - right.getGreen()) * (left.getGreen() - right.getGreen()))
+                        + ((left.getBlue() - right.getBlue()) * (left.getBlue() - right.getBlue()));
 
                 pixels[x][y].setEnergy(energy);
 
