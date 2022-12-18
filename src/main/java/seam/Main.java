@@ -12,8 +12,9 @@ public class Main
         ImageReader imageReader = new ImageReader("../seam.jpg");
         BufferedImage image = imageReader.copyOriginalImage();
         File outputFile = new File("created.jpg");
-        System.out.println("Image creation successful.");
         ImageIO.write(image, "jpg", outputFile);
+        System.out.println("Image creation successful.");
+
         BufferedImage greyScaleImage = imageReader.generateGreyscaleImage();
         File greyscaleOutputFile = new File("greyscale.jpg");
         ImageIO.write(greyScaleImage, "jpg", greyscaleOutputFile);
@@ -21,10 +22,10 @@ public class Main
 
         int newImageWidth = 1000;
         int newImageHeight = image.getHeight();
-
         BufferedImage seamImage = imageReader.generateSeamImage(newImageWidth, newImageHeight);
-        ImageIO.write(seamImage, "jpg", new File("createdSeam.jpg"));
-
+        File seamOutputFile = new File("createdSeam.jpg");
+        ImageIO.write(seamImage, "jpg", seamOutputFile);
+        System.out.println("Image creation successful.");
 
     }
 }

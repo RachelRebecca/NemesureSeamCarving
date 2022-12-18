@@ -71,21 +71,6 @@ public class ImageReader
         return image;
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < imageWidth; i++)
-        {
-            for (int j = 0; j < imageHeight; j++)
-            {
-                builder.append(pixels[i][j].getEnergy()).append("\t");
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
-
     public BufferedImage generateSeamImage(int newImageWidth, int newImageHeight)
     {
         BufferedImage image = new BufferedImage(newImageWidth, newImageHeight,

@@ -92,6 +92,7 @@ public class SeamCalculator
 
                     // with vertical seams, y values are explicit, x values are implicit
                     seam.addNewValue(counter, y);
+                    // TODO: cannot simply add smallest value - must add smallest value from bottom -> top
 
                     if (!alreadyChanged)
                     {
