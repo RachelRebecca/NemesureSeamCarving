@@ -75,12 +75,33 @@ public class SeamCalculator
         Seam seam = new Seam(length);
 
         int counter = 0;
+        boolean alreadyChanged;
 
-        for (int i = pixels.length - 1; i >= 0; i--)
+        double currSmallestRowValue = 255 * 255 * 255;
+
+        for (int x = pixels.length - 1; x >= 0; x--)
         {
-            for (int j = pixels[i].length - 1; j >= 0; j--)
+            alreadyChanged = false;
+            for (int y = pixels[x].length - 1; y >= 0; y--)
             {
+                double verticalEnergy = pixels[x][y].getVerticalEnergy();
 
+                if (verticalEnergy < currSmallestRowValue)
+                {
+                    currSmallestRowValue = verticalEnergy;
+
+                    // with vertical seams, y values are explicit, x values are implicit
+                    seam.addNewValue(counter, y);
+
+                    if (!alreadyChanged)
+                    {
+                        alreadyChanged = true;
+                        counter++;
+                    }
+                } else if (verticalEnergy == currSmallestRowValue)
+                {
+                    // TODO: if there is a tie, see next level above and check that one for a tie
+                }
             }
         }
 
@@ -92,5 +113,10 @@ public class SeamCalculator
         Seam seam = new Seam(length);
 
         return seam;
+    }
+
+    public Pixel[][] getPixels()
+    {
+        return this.pixels;
     }
 }

@@ -18,5 +18,13 @@ public class Main
         File greyscaleOutputFile = new File("greyscale.jpg");
         ImageIO.write(greyScaleImage, "jpg", greyscaleOutputFile);
         System.out.println("Image creation successful.");
+
+        int newImageWidth = 1000;
+        int newImageHeight = image.getHeight();
+
+        BufferedImage seamImage = imageReader.generateSeamImage(newImageWidth, newImageHeight);
+        ImageIO.write(seamImage, "jpg", new File("createdSeam.jpg"));
+
+
     }
 }
