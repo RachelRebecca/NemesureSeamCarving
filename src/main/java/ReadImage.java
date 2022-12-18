@@ -62,7 +62,7 @@ public class ReadImage
               Display the 2D array as an image, borders are white
 
           List of seams:
-             lower energy is the least important - red lines on wikipedia page are teh seams,
+             lower energy is the least important - red lines on wikipedia page are the seams,
              none of which go through person or tower - each seam is 1 pixel wide
                     To change the width of the picture, use vertical seams
                     To change the height of the picture, use horizontal seams

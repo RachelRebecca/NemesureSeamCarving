@@ -9,7 +9,7 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-        ImageReader imageReader = new ImageReader("../seam.jpg");
+        ImageReader imageReader = new ImageReader("../small.jpeg");
         BufferedImage image = imageReader.copyOriginalImage();
         File outputFile = new File("created.jpg");
         System.out.println("Image creation successful.");
@@ -18,5 +18,7 @@ public class Main
         File greyscaleOutputFile = new File("greyscale.jpg");
         ImageIO.write(greyScaleImage, "jpg", greyscaleOutputFile);
         System.out.println("Image creation successful.");
+
+        imageReader.calculateVerticalEnergy();
     }
 }
