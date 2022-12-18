@@ -4,8 +4,7 @@ import java.awt.*;
 
 public class Pixel
 {
-    private final int maxEnergy =  255 * 255 * 6;
-    private Color color;
+    private final Color color;
     private double energy;
     private double verticalEnergy;
     private double horizontalEnergy;
@@ -13,7 +12,7 @@ public class Pixel
     public Pixel(int rgb)
     {
         this.color = new Color(rgb);
-        this.energy = maxEnergy;
+        this.energy = 255 * 255 * 6;
     }
 
     public Color getColor()
