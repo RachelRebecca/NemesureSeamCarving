@@ -21,7 +21,6 @@ public class SeamCalculator
         this.imageHeight = imageHeight;
         this.newImageWidth = newImageWidth;
         this.newImageHeight = newImageHeight;
-        calculateSeam();
     }
 
     public void calculateSeam()

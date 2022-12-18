@@ -4,9 +4,9 @@ import java.awt.*;
 
 public class EnergyCalculator
 {
-    private Pixel[][] pixels;
-    private int imageWidth;
-    private int imageHeight;
+    private final Pixel[][] pixels;
+    private final int imageWidth;
+    private final int imageHeight;
     private double maxEnergy = 0;
     private double minEnergy = 255 * 255 * 6;
 
@@ -15,14 +15,9 @@ public class EnergyCalculator
         this.pixels = pixels;
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
-
-        calculateEnergy();
-        calculateVerticalEnergy();
-        calculateHorizontalEnergy();
     }
 
-
-    private void calculateEnergy()
+    public void calculateEnergy()
     {
         for (int x = 1; x < imageWidth - 1; x++)
         {

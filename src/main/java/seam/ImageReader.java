@@ -30,6 +30,9 @@ public class ImageReader
             }
 
             energyCalculator = new EnergyCalculator(pixels, imageWidth, imageHeight);
+            energyCalculator.calculateEnergy();
+            energyCalculator.calculateVerticalEnergy();
+            energyCalculator.calculateHorizontalEnergy();
         } catch (Exception exception)
         {
             System.out.println(exception.getMessage());
