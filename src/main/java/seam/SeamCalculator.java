@@ -27,14 +27,6 @@ public class SeamCalculator
         int height = Math.abs(imageHeight - newImageHeight);
         this.verticalSeams = new Seam[width];
         this.horizontalSeams = new Seam[height];
-
-        System.out.println("old image width: " + imageWidth);
-        System.out.println("old image height: " + imageHeight);
-        System.out.println("new image width: " + newImageWidth);
-        System.out.println("new image height: " + newImageHeight);
-
-        System.out.println("Length horizontal: " + horizontalSeams.length);
-        System.out.println("Length vertical: " + verticalSeams.length);
     }
 
     public void calculateSeam()
@@ -43,6 +35,8 @@ public class SeamCalculator
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(imageWidth);
             Pixel[][] newPixels = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL);
+            System.out.println(newPixels);
+           // this.pixels = newPixels;
             // TODO: can't make this.pixels into newPixels without crashing
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
@@ -61,48 +55,37 @@ public class SeamCalculator
 
         Pixel[][] newPixels = new Pixel[numX][numY];
 
-        int counter = 0;
         int newPixelRowIndex = 0;
         int newPixelColIndex = 0;
 
-        try
-        {
-            // TODO: skip over the seam that is meant to be skipped per row
-            for (int x = 0; x < numX; x++)
-            {
-                for (int y = 0; y < numY; y++)
-                {
-                    if (orientation == Orientation.VERTICAL && y == seam.getSeam(x))
-                    {
 
-                    } else
+        // TODO: skip over the seam that is meant to be skipped per row
+        for (int x = 0; x < pixels.length; x++)
+        {
+            newPixelRowIndex++;
+            for (int y = 0; y < pixels[x].length; y++)
+            {
+                if (orientation == Orientation.VERTICAL && y == seam.getSeam(x))
+                {
+                    newPixelRowIndex--;
+                }
+                else if (orientation == Orientation.HORIZONTAL && x == seam.getSeam(y))
+                {
+                    newPixelColIndex--;
+                }
+                else
+                {
+                    try
                     {
                         newPixels[newPixelRowIndex][newPixelColIndex] = pixels[x][y];
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
+                    newPixelColIndex = y;
                 }
             }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
         }
-
-       /* for (int i = 0; i < pixels.length; i++)
-        {
-            for (int j = 0; j < pixels[i].length; j++)
-            {
-                System.out.println(seam.getSeam(counter));
-                if ((orientation == Orientation.VERTICAL && i == seam.getSeam(counter))
-                        || (orientation == Orientation.HORIZONTAL && j == seam.getSeam(counter)))
-                {
-                    counter++;
-                } else
-                {
-                    newPixels[newPixelRowIndex++][newPixelColIndex++] = pixels[i][j];
-                    newPixelRowIndex %= numX;
-                    newPixelColIndex %= numY;
-                }
-            }
-        }*/
 
         return newPixels;
     }
