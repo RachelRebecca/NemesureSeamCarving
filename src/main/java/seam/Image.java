@@ -35,7 +35,7 @@ public class Image
             energyCalculator.calculateHorizontalEnergy();
         } catch (Exception exception)
         {
-            System.out.println(exception.getMessage());
+            exception.printStackTrace();
         }
     }
 
