@@ -20,7 +20,7 @@ public class Main
         ImageIO.write(greyScaleImage, "jpg", greyscaleOutputFile);
         System.out.println("Image creation successful.");
 
-        int newImageWidth = 1000;
+        int newImageWidth = 6;
         int newImageHeight = image.getHeight();
         BufferedImage seamImage = imageReader.generateSeamImage(newImageWidth, newImageHeight);
         File seamOutputFile = new File("createdSeam.jpg");

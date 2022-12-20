@@ -18,4 +18,15 @@ public class Seam
     {
         this.seam[index] = value;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < seam.length; i++)
+        {
+            builder.append(seam[i]).append(" ");
+        }
+        return builder.toString();
+    }
 }

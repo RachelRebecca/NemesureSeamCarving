@@ -49,4 +49,15 @@ public class Pixel
     {
         this.horizontalEnergy = horizontalEnergy;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Pixel{" +
+                "color=" + color +
+                ", energy=" + energy +
+                ", verticalEnergy=" + verticalEnergy +
+                ", horizontalEnergy=" + horizontalEnergy +
+                '}';
+    }
 }
