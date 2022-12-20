@@ -5,16 +5,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
-public class ImageReader
+public class Image
 {
     private int imageWidth;
     private int imageHeight;
     private Pixel[][] pixels;
     private EnergyCalculator energyCalculator;
 
-    public ImageReader(String imagePath)
+    public Image(String imagePath)
     {
-        try (InputStream seamImage = ImageReader.class.getResourceAsStream(imagePath))
+        try (InputStream seamImage = Image.class.getResourceAsStream(imagePath))
         {
             BufferedImage image = ImageIO.read(seamImage);
 

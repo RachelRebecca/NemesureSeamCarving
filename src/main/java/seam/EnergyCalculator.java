@@ -85,7 +85,8 @@ public class EnergyCalculator
                     topPixelEnergyC = pixels[x - 1][y + 1].getVerticalEnergy();
                 }
 
-                double verticalEnergy = Math.min(topPixelEnergyA, Math.min(topPixelEnergyB, topPixelEnergyC));
+                double verticalEnergy = Math.min(topPixelEnergyA,
+                        Math.min(topPixelEnergyB, topPixelEnergyC));
 
 
                 verticalEnergy += currPixel.getEnergy();

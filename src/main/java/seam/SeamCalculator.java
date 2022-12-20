@@ -43,10 +43,12 @@ public class SeamCalculator
 
     private void recalculate(Seam seam, Orientation orientation)
     {
-        int xCount = orientation == Orientation.VERTICAL ? pixels.length - 1 : pixels.length;
-        int yCount = orientation == Orientation.HORIZONTAL ? pixels[0].length - 1 : pixels[0].length;
+        int numX = orientation == Orientation.VERTICAL ?
+                pixels.length - 1 : pixels.length;
+        int numY = orientation == Orientation.HORIZONTAL ?
+                pixels[0].length - 1 : pixels[0].length;
 
-        Pixel[][] newPixels = new Pixel[xCount][yCount];
+        Pixel[][] newPixels = new Pixel[numX][numY];
 
         int counter = 0;
         int newPixelRowIndex = 0;
@@ -91,7 +93,8 @@ public class SeamCalculator
 
                     // with vertical seams, y values are explicit, x values are implicit
                     seam.addNewValue(counter, y);
-                    // TODO: cannot simply add smallest value - must add smallest value from bottom -> top
+                    // TODO: cannot simply add smallest value -
+                    //  must add smallest value from bottom -> top
 
                     if (!alreadyChanged)
                     {

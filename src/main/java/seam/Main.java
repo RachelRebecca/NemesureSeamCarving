@@ -9,7 +9,7 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-        ImageReader imageReader = new ImageReader("../seam.jpg");
+        Image imageReader = new Image("../seam.jpg");
         BufferedImage image = imageReader.copyOriginalImage();
         File outputFile = new File("created.jpg");
         ImageIO.write(image, "jpg", outputFile);
