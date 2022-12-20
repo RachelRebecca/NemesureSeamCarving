@@ -29,24 +29,35 @@ public class SeamCalculator
         this.horizontalSeams = new Seam[height];
     }
 
-    public void calculateSeam()
+    public Pixel[][] calculateSeam()
     {
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(imageWidth);
-            Pixel[][] newPixels = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL);
-            System.out.println(newPixels);
-           // this.pixels = newPixels;
-            // TODO: can't make this.pixels into newPixels without crashing
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(imageHeight);
-            //recalculate(horizontalSeams[horizontalSeam], Orientation.HORIZONTAL);
         }
+
+        Pixel[][] newPixels = null;
+
+        for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
+        {
+            newPixels = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL,
+                    (newPixels == null ? pixels : newPixels));
+        }
+
+        for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
+        {
+            recalculate(horizontalSeams[horizontalSeam], Orientation.HORIZONTAL,
+                    (newPixels == null ? pixels : newPixels));
+        }
+
+        return newPixels;
     }
 
-    private Pixel[][] recalculate(Seam seam, Orientation orientation)
+    private Pixel[][] recalculate(Seam seam, Orientation orientation, Pixel[][] pixels)
     {
         int numX = orientation == Orientation.VERTICAL
                 ? pixels.length - 1 : pixels.length;
@@ -59,7 +70,7 @@ public class SeamCalculator
         int newPixelColIndex = 0;
 
 
-        // TODO: skip over the seam that is meant to be skipped per row
+        // TODO: FIX THIS METHOD SO THAT NO NEWPIXEL[X][Y] VALUES ARE NULL
         for (int x = 0; x < pixels.length; x++)
         {
             newPixelRowIndex++;
@@ -68,12 +79,10 @@ public class SeamCalculator
                 if (orientation == Orientation.VERTICAL && y == seam.getSeam(x))
                 {
                     newPixelRowIndex--;
-                }
-                else if (orientation == Orientation.HORIZONTAL && x == seam.getSeam(y))
+                } else if (orientation == Orientation.HORIZONTAL && x == seam.getSeam(y))
                 {
                     newPixelColIndex--;
-                }
-                else
+                } else
                 {
                     try
                     {

@@ -81,16 +81,17 @@ public class Image
 
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
                 newImageWidth, newImageHeight);
-        seamCalculator.calculateSeam();
-        Pixel[][] newPixels = seamCalculator.getPixels();
+        Pixel[][] newPixels = seamCalculator.calculateSeam();
+
         for (int x = 0; x < newImageWidth; x++)
         {
             for (int y = 0; y < newImageHeight; y++)
             {
-                Color color = newPixels[x][y].getColor();
+                Color color = (newPixels[x][y] == null ? pixels[x][y].getColor() : newPixels[x][y].getColor());
                 image.setRGB(x, y, color.getRGB());
             }
         }
+
         return image;
     }
 }
