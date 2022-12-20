@@ -7,8 +7,8 @@ public class EnergyCalculator
     private final Pixel[][] pixels;
     private final int imageWidth;
     private final int imageHeight;
-    private double maxEnergy = 0;
-    private double minEnergy = 255 * 255 * 6;
+    double maxEnergy = 0;
+    double minEnergy = 255 * 255 * 6;
 
     public EnergyCalculator(Pixel[][] pixels, int imageWidth, int imageHeight)
     {
@@ -139,6 +139,6 @@ public class EnergyCalculator
         double brightness = ((pixel.getEnergy() - minEnergy) * 255.0)
                 / (maxEnergy - minEnergy);
 
-        return (int) brightness;
+        return Math.min((int) brightness, 255);
     }
 }

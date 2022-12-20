@@ -66,7 +66,7 @@ public class Image
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                int brightness = Math.min(energyCalculator.calculateBrightness(pixels[x][y]), 255);
+                int brightness = energyCalculator.calculateBrightness(pixels[x][y]);
                 color = new Color(brightness, brightness, brightness);
                 image.setRGB(x, y, color.getRGB());
             }

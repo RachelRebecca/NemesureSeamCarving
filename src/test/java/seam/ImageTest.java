@@ -1,6 +1,0 @@
-package seam;
-
-class ImageTest
-{
-
-}
