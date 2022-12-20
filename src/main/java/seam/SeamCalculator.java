@@ -42,16 +42,8 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(imageWidth);
-          /*  Pixel[][] newPixel = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL);
-            for (int x = 0; x < newPixel.length; x++)
-            {
-                for (int y = 0; y < newPixel[x].length; y++)
-                {
-                    System.out.print(newPixel[x][y]);
-                }
-                System.out.println();
-            }
-            this.pixels = new Pixel[newPixel.length][newPixel[0].length];*/
+            Pixel[][] newPixels = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL);
+            // TODO: can't make this.pixels into newPixels without crashing
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
@@ -73,22 +65,25 @@ public class SeamCalculator
         int newPixelRowIndex = 0;
         int newPixelColIndex = 0;
 
-        // TODO: skip over the seam that is meant to be skipped per row
-        for (int x = 0; x < pixels.length; x++)
+        try
         {
-            for (int y = 0; y < pixels[x].length; y++)
+            // TODO: skip over the seam that is meant to be skipped per row
+            for (int x = 0; x < numX; x++)
             {
-                System.out.println(seam.getSeam(counter));
+                for (int y = 0; y < numY; y++)
+                {
+                    if (orientation == Orientation.VERTICAL && y == seam.getSeam(x))
+                    {
 
-                if (orientation == Orientation.VERTICAL && y == seam.getSeam(counter))
-                {
-                    counter++;
-                }
-                else
-                {
-                    newPixels[newPixelRowIndex][newPixelColIndex] = pixels[x][y];
+                    } else
+                    {
+                        newPixels[newPixelRowIndex][newPixelColIndex] = pixels[x][y];
+                    }
                 }
             }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
        /* for (int i = 0; i < pixels.length; i++)
