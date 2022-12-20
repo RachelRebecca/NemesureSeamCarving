@@ -1,5 +1,7 @@
 package seam;
 
+import java.awt.*;
+
 public class SeamCalculator
 {
     private Pixel[][] pixels;
@@ -42,22 +44,52 @@ public class SeamCalculator
 
         Pixel[][] newPixels = null;
 
-        for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
+
+        for (Seam seam : this.verticalSeams)
         {
-            newPixels = recalculate(verticalSeams[verticalSeam], Orientation.VERTICAL,
+            newPixels = removeVerticalSeam(seam,
                     (newPixels == null ? pixels : newPixels));
         }
 
+        /*
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
-            recalculate(horizontalSeams[horizontalSeam], Orientation.HORIZONTAL,
+            removeSeam(horizontalSeams[horizontalSeam], Orientation.HORIZONTAL,
                     (newPixels == null ? pixels : newPixels));
         }
-
+        */
         return newPixels;
     }
 
-    private Pixel[][] recalculate(Seam seam, Orientation orientation, Pixel[][] pixels)
+    public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
+    {
+        // removing one complete column from the image
+        int width = pixels.length - 1;
+        int height = pixels[0].length;
+        Pixel[][] newPixels = new Pixel[width][height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0, pixelY = 0; y < height; y++, pixelY++)
+            {
+                try
+                {
+                    if (y == seam.getSeam(x))
+                    {
+                        pixelY++;
+                    }
+                    newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)];
+
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return newPixels;
+    }
+
+    public Pixel[][] removeSeam(Seam seam, Orientation orientation, Pixel[][] pixels)
     {
         int numX = orientation == Orientation.VERTICAL
                 ? pixels.length - 1 : pixels.length;
@@ -99,7 +131,7 @@ public class SeamCalculator
         return newPixels;
     }
 
-    private Seam calculateVerticalSeam(int length)
+    public Seam calculateVerticalSeam(int length)
     {
         Seam seam = new Seam(length);
 
@@ -148,7 +180,7 @@ public class SeamCalculator
         return seam;
     }
 
-    private Seam calculateHorizontalSeam(int length)
+    public Seam calculateHorizontalSeam(int length)
     {
         Seam seam = new Seam(length);
 
