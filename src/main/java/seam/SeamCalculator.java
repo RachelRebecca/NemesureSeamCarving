@@ -33,25 +33,28 @@ public class SeamCalculator
 
     public Pixel[][] calculateSeam()
     {
+        Pixel[][] newPixels = null;
+
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(imageWidth);
+            newPixels = removeVerticalSeam(verticalSeams[verticalSeam],
+                    (newPixels == null ? pixels : newPixels));
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(imageHeight);
+            newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam],
+                    (newPixels == null ? pixels : newPixels));
         }
 
-        Pixel[][] newPixels = null;
-
-
-        for (Seam seam : this.verticalSeams)
+        /*
+                for (Seam seam : this.verticalSeams)
         {
             newPixels = removeVerticalSeam(seam,
                     (newPixels == null ? pixels : newPixels));
         }
 
-        /*
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             removeSeam(horizontalSeams[horizontalSeam], Orientation.HORIZONTAL,
@@ -61,8 +64,20 @@ public class SeamCalculator
         return newPixels;
     }
 
+    private Pixel[][] removeHorizontalSeam(Seam horizontalSeam, Pixel[][] pixels)
+    {
+        int width = pixels.length;
+        int height = pixels[0].length - 1;
+
+        Pixel[][] newPixels = new Pixel[width][height];
+
+        return newPixels;
+    }
+
     public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
+        System.out.println(seam);
+
         // removing one complete column from the image
         int width = pixels.length - 1;
         int height = pixels[0].length;
@@ -72,62 +87,13 @@ public class SeamCalculator
         {
             for (int y = 0, pixelY = 0; y < height; y++, pixelY++)
             {
-                try
+                if (y == seam.getSeam(x))
                 {
-                    if (y == seam.getSeam(x))
-                    {
-                        pixelY++;
-                    }
-                    newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)];
-
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
+                    pixelY++;
                 }
+                newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)];
             }
         }
-        return newPixels;
-    }
-
-    public Pixel[][] removeSeam(Seam seam, Orientation orientation, Pixel[][] pixels)
-    {
-        int numX = orientation == Orientation.VERTICAL
-                ? pixels.length - 1 : pixels.length;
-        int numY = orientation == Orientation.HORIZONTAL
-                ? pixels[0].length - 1 : pixels[0].length;
-
-        Pixel[][] newPixels = new Pixel[numX][numY];
-
-        int newPixelRowIndex = 0;
-        int newPixelColIndex = 0;
-
-
-        // TODO: FIX THIS METHOD SO THAT NO NEWPIXEL[X][Y] VALUES ARE NULL
-        for (int x = 0; x < pixels.length; x++)
-        {
-            newPixelRowIndex++;
-            for (int y = 0; y < pixels[x].length; y++)
-            {
-                if (orientation == Orientation.VERTICAL && y == seam.getSeam(x))
-                {
-                    newPixelRowIndex--;
-                } else if (orientation == Orientation.HORIZONTAL && x == seam.getSeam(y))
-                {
-                    newPixelColIndex--;
-                } else
-                {
-                    try
-                    {
-                        newPixels[newPixelRowIndex][newPixelColIndex] = pixels[x][y];
-                    } catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                    newPixelColIndex = y;
-                }
-            }
-        }
-
         return newPixels;
     }
 
@@ -138,8 +104,8 @@ public class SeamCalculator
         int smallestIndex = 0;
         for (int col = 1; col < imageHeight; col++)
         {
-            smallestIndex = pixels[imageWidth - 2][col].getVerticalEnergy()
-                    < pixels[imageWidth - 2][smallestIndex].getVerticalEnergy()
+            smallestIndex = pixels[length - 2][col].getVerticalEnergy()
+                    < pixels[length - 2][smallestIndex].getVerticalEnergy()
                     ? col : smallestIndex;
         }
 

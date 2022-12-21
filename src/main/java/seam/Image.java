@@ -79,7 +79,7 @@ public class Image
         BufferedImage image = new BufferedImage(newImageWidth, newImageHeight,
                 BufferedImage.TYPE_INT_RGB);
 
-        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+        SeamCalculatorV2 seamCalculator = new SeamCalculatorV2(pixels, imageWidth, imageHeight,
                 newImageWidth, newImageHeight);
         Pixel[][] newPixels = seamCalculator.calculateSeam();
 
