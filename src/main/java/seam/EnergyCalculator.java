@@ -141,4 +141,9 @@ public class EnergyCalculator
 
         return Math.min((int) brightness, 255);
     }
+
+    public Pixel[][] getPixels()
+    {
+        return this.pixels;
+    }
 }

@@ -2,13 +2,13 @@ package seam;
 
 public class SeamCalculatorV2
 {
-    private Pixel[][] pixels;
-    private int imageWidth;
-    private int imageHeight;
-    private int newImageWidth;
-    private int newImageHeight;
-    private Seam[] horizontalSeams;
-    private Seam[] verticalSeams;
+    private final Pixel[][] pixels;
+    private final int imageWidth;
+    private final int imageHeight;
+    private final int newImageWidth;
+    private final int newImageHeight;
+    private final Seam[] horizontalSeams;
+    private final Seam[] verticalSeams;
 
     public SeamCalculatorV2(Pixel[][] pixels,
                             int imageWidth,
@@ -52,8 +52,8 @@ public class SeamCalculatorV2
     public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
         System.out.println(seam);
-        int width = pixels.length - 1;
-        int height = pixels[0].length;
+        int width = pixels.length;
+        int height = pixels[0].length - 1;
         Pixel[][] newPixels = new Pixel[width][height];
 
         for (int x = 0; x < width; x++)
@@ -64,9 +64,10 @@ public class SeamCalculatorV2
                 {
                     pixelY++;
                 }
-                newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)]; //Math.min(pixelY, height - 1)
+                newPixels[x][y] = pixels[x][pixelY]; //Math.min(pixelY, height - 1)
             }
         }
+
         return newPixels;
     }
 
@@ -105,7 +106,7 @@ public class SeamCalculatorV2
             double topB = pixels[row][smallestIndex].getVerticalEnergy();
 
             double topC = 255 * 255 * 255;
-            if (smallestIndex + 1 < imageHeight)
+            if (smallestIndex + 1 < pixels[0].length)
             {
                 topC = pixels[row][smallestIndex + 1].getVerticalEnergy();
             }
