@@ -52,8 +52,8 @@ public class SeamCalculatorV2
     public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
         System.out.println(seam);
-        int width = pixels.length;
-        int height = pixels[0].length - 1;
+        int width = pixels.length - 1;
+        int height = pixels[0].length;
         Pixel[][] newPixels = new Pixel[width][height];
 
         for (int x = 0; x < width; x++)
@@ -64,7 +64,7 @@ public class SeamCalculatorV2
                 {
                     pixelY++;
                 }
-                newPixels[x][y] = pixels[x][pixelY]; //Math.min(pixelY, height - 1)
+                newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)]; //Math.min(pixelY, height - 1)
             }
         }
 

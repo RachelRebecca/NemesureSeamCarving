@@ -64,12 +64,21 @@ class SeamCalculatorV2Test
                 imageWidth - 1, imageHeight);
         Pixel[][] newPixels = seamCalculator.calculateSeam();
 
-        System.out.println();
+        for (int i = 0; i < pixels.length; i++)
+        {
+            for (int j = 0; j < pixels[i].length; j++)
+            {
+                System.out.print(pixels[i][j].getVerticalEnergy() + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("\n");
         for (int i = 0; i < newPixels.length; i++)
         {
             for (int j = 0; j < newPixels[i].length; j++)
             {
-                System.out.print(newPixels[i][j].getEnergy() + " ");
+                System.out.print(newPixels[i][j].getVerticalEnergy() + " ");
             }
             System.out.println();
         }
