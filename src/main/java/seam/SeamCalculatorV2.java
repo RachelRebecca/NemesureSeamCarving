@@ -30,32 +30,41 @@ public class SeamCalculatorV2
         Pixel[][] newPixels = this.pixels;
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
-            verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
+            try
+            {
+                verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
+                newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
             newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
         }
+        //return this.pixels;
 
-        return this.pixels;
+       return newPixels;
     }
 
     public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
         System.out.println(seam);
-        Pixel[][] newPixels = new Pixel[pixels.length][pixels[0].length - 1];
+        int width = pixels.length - 1;
+        int height = pixels[0].length;
+        Pixel[][] newPixels = new Pixel[width][height];
 
-        for (int x = 0; x < pixels.length; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0, pixelY = 0; y < pixels[0].length - 1; y++, pixelY++)
+            for (int y = 0, pixelY = 0; y < height; y++, pixelY++)
             {
                 if (y == seam.getSeam(x))
                 {
                     pixelY++;
                 }
-                newPixels[x][y] = pixels[x][Math.min(pixelY, pixels[0].length - 2)];
+                newPixels[x][y] = pixels[x][Math.min(pixelY, height - 1)]; //Math.min(pixelY, height - 1)
             }
         }
         return newPixels;

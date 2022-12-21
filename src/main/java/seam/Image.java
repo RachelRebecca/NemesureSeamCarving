@@ -83,13 +83,25 @@ public class Image
                 newImageWidth, newImageHeight);
         Pixel[][] newPixels = seamCalculator.calculateSeam();
 
-        for (int x = 0; x < newImageWidth; x++)
+        try
         {
-            for (int y = 0; y < newImageHeight; y++)
+            System.out.println("new image width: " + newImageWidth);
+            System.out.println("new image height: " + newImageHeight);
+            System.out.println("new pixel width: " + newPixels.length);
+            System.out.println("new pixel height: " + newPixels[0].length);
+
+            for (int x = 0; x < newImageWidth; x++)
             {
-                Color color = (newPixels[x][y] == null ? pixels[x][y].getColor() : newPixels[x][y].getColor());
-                image.setRGB(x, y, color.getRGB());
+                for (int y = 0; y < newImageHeight; y++)
+                {
+                   // Color color = (newPixels[x][y] == null ? pixels[x][y].getColor() : newPixels[x][y].getColor());
+                    Color color = newPixels[x][y].getColor();
+                    image.setRGB(x, y, color.getRGB());
+                }
             }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         return image;
