@@ -3,10 +3,6 @@ package seam;
 public class SeamCalculatorV2
 {
     private final Pixel[][] pixels;
-    private final int imageWidth;
-    private final int imageHeight;
-    private final int newImageWidth;
-    private final int newImageHeight;
     private final Seam[] horizontalSeams;
     private final Seam[] verticalSeams;
 
@@ -17,10 +13,6 @@ public class SeamCalculatorV2
                             int newImageHeight)
     {
         this.pixels = pixels;
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
-        this.newImageWidth = newImageWidth;
-        this.newImageHeight = newImageHeight;
         this.verticalSeams = new Seam[imageWidth - newImageWidth]; // x is implicit, y is explicit
         this.horizontalSeams = new Seam[imageHeight - newImageHeight]; // y is implicit, x is explicit
     }

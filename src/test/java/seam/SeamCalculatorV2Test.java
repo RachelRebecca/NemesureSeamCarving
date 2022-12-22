@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SeamCalculatorV2Test
 {
-
     private static Pixel[][] pixels;
     private static int imageWidth;
     private static int imageHeight;
@@ -51,6 +50,7 @@ class SeamCalculatorV2Test
         energyCalculator = new EnergyCalculator(pixels, imageWidth, imageHeight);
         energyCalculator.calculateEnergy();
         energyCalculator.calculateVerticalEnergy();
+        energyCalculator.calculateHorizontalEnergy();
     }
 
     @Test
