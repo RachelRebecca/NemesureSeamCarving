@@ -134,17 +134,14 @@ public class SeamCalculator
                 topC = pixels[row][smallestIndex + 1].getVerticalEnergy();
             }
 
-            int seamIndex = smallestIndex;
             if (topA < topB && topA < topC)
             {
-                seamIndex = smallestIndex - 1;
-                smallestIndex = seamIndex;
+                smallestIndex -= 1;
             } else if (topC < topB && topC < topA)
             {
-                seamIndex = smallestIndex + 1;
-                smallestIndex = seamIndex;
+                smallestIndex += 1;
             }
-            seam.addNewValue(row, seamIndex);
+            seam.addNewValue(row, smallestIndex);
             row--;
         }
 
@@ -158,8 +155,8 @@ public class SeamCalculator
         int smallestIndex = 0;
         for (int row = 0; row < pixels.length; row++)
         {
-            if (pixels[row][pixels[0].length - 1].getVerticalEnergy()
-                    < pixels[smallestIndex][pixels[0].length - 1].getVerticalEnergy())
+            if (pixels[row][pixels[0].length - 1].getHorizontalEnergy()
+                    < pixels[smallestIndex][pixels[0].length - 1].getHorizontalEnergy())
             {
                 smallestIndex = row;
             }
@@ -186,17 +183,14 @@ public class SeamCalculator
                 leftC = pixels[smallestIndex + 1][col].getHorizontalEnergy();
             }
 
-            int seamIndex = smallestIndex;
             if (leftA < leftB && leftA < leftC)
             {
-                seamIndex = smallestIndex - 1;
-                smallestIndex = seamIndex;
+                smallestIndex -= 1;
             } else if (leftC < leftB && leftC < leftA)
             {
-                seamIndex = smallestIndex + 1;
-                smallestIndex = seamIndex;
+                smallestIndex += 1;
             }
-            seam.addNewValue(col, seamIndex);
+            seam.addNewValue(col, smallestIndex);
             col--;
         }
 

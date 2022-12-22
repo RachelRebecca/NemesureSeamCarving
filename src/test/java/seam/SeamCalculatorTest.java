@@ -58,24 +58,21 @@ class SeamCalculatorTest
         // start with three rows and four columns
         // remove two rows and two columns
         // end should be 1 row, two columns
-
         /*
         {H, V} - Before
         {1, 1}, {5, 4}, {6, 3}, {11, 5},
         {3, 4}, {3, 3}, {8, 8}, {8, 4},
         {5, 8}, {5, 5}, {7, 7}, {9, 6}
-         */
-        /*
+
          {H, V} - After removing vertical seams
          {5, 4}, {11, 5}
          {3, 4}, {8, 8}
          {5, 8}, {7, 7}
-         */
-        /*
+
          {H, V} - After removing horizontal seams
          {5, 4}, {11, 5}
          */
-        double[][] expectedVerticalEnergies = new double[][]{{8}, {5}};
+        double[][] expectedVerticalEnergies = new double[][]{{4, 5}};
 
         double[][] expectedHorizontalEnergies = new double[][]{{5, 11}};
 
@@ -92,8 +89,8 @@ class SeamCalculatorTest
             }
         }
 
-       // assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
-       // assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+       assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
+       assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
         assertEquals(imageWidth - 2, newPixels.length);
         assertEquals(imageHeight - 2, newPixels[0].length);
 
