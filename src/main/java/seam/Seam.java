@@ -2,7 +2,7 @@ package seam;
 
 public class Seam
 {
-    private int[] seam;
+    private final int[] seam;
 
     public Seam(int seamLength)
     {

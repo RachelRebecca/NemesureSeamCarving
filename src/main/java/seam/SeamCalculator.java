@@ -32,8 +32,6 @@ public class SeamCalculator
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
             newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
         }
-        //return this.pixels;
-
         return newPixels;
     }
 
@@ -64,31 +62,39 @@ public class SeamCalculator
         int height = pixels[0].length;
         Pixel[][] newPixels = new Pixel[width][height];
 
-        /* Another idea
-        for (int y = 0; y < height; y++)
+        // replace all seam elements with null
+        for (int y = 0; y < pixels[0].length; y++)
         {
-            for (int x = 0, pixelX = 0; x < height; x++, pixelX++)
-            {
-                if (y == seam.getSeam(x))
-                {
-                    pixelX++;
-                }
-                newPixels[x][y] = pixels[pixelX][y];
-            }
-        } */
-
-        /*
-        for (int x = 0, pixelX = 0; x < width; x++, pixelX++)
-        {
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < pixels.length; x++)
             {
                 if (x == seam.getSeam(y))
                 {
-                    pixelX++;
+                    pixels[x][y] = null;
                 }
-                newPixels[x][y] = pixels[pixelX][y];
             }
-        }*/
+        }
+
+        // move all pixels up one row
+        for (int x = 1; x < pixels.length; x++)
+        {
+            for (int y = 0; y < pixels[0].length; y++)
+            {
+                if (pixels[x - 1][y] == null)
+                {
+                    pixels[x - 1][y] = pixels[x][y];
+                    pixels[x][y] = null;
+                }
+            }
+        }
+
+        // set newPixels = pixels all the way until the last row
+        for (int x = 0; x < pixels.length - 1; x++)
+        {
+            for (int y = 0; y < pixels[0].length; y++)
+            {
+                newPixels[x][y] = pixels[x][y];
+            }
+        }
 
         return newPixels;
     }

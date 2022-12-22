@@ -1,45 +1,36 @@
 package seam;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SeamCalculatorTest
 {
-    private static Pixel[][] pixels;
-    private static int imageWidth;
-    private static int imageHeight;
+    private Pixel[][] pixels;
+    private int imageWidth;
+    private int imageHeight;
 
-    @BeforeAll
-    public static void setUpValues()
+    @BeforeEach
+    public void setUpValues()
     {
         imageWidth = 3;
         imageHeight = 4;
         pixels = new Pixel[imageWidth][imageHeight];
         Color[] colors = new Color[]{
-                Color.RED,
-                Color.ORANGE,
-                Color.YELLOW,
-                Color.GREEN,
-                Color.BLUE,
-                Color.PINK,
-                Color.BLACK,
-                Color.WHITE,
-                Color.LIGHT_GRAY,
-                Color.DARK_GRAY,
-                Color.MAGENTA,
-                Color.CYAN
+                Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
+                Color.BLUE, Color.PINK, Color.BLACK, Color.WHITE,
+                Color.LIGHT_GRAY, Color.DARK_GRAY, Color.MAGENTA, Color.CYAN
         };
 
         double[] energies = new double[]{1, 4, 3, 5, 3, 2, 5, 2, 5, 2, 4, 2};
         double[] verticalEnergies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
-        double[] horizontalEnergies = new double[]{ 1, 5, 6, 11,
-                                                    3, 3, 8, 8,
-                                                    5, 5, 7, 9};
+        double[] horizontalEnergies = new double[]{1, 5, 6, 11, 3, 3, 8, 8, 5, 5, 7, 9};
         int counter = 0;
         int index = 0;
         for (int i = 0; i < pixels.length; i++)
@@ -149,17 +140,20 @@ class SeamCalculatorTest
 
         // expecting two rows, four columns
         /*
-        double[][] expectedHorizontalEnergies = new double[][]{{4, 3, 5}, {4, 8, 4}, {8, 7, 6}};
+        3, 5, 8, 11,
+        5, 5, 7, 9
+         */
+        double[][] expectedHorizontalEnergies = new double[][]{{3, 5, 8, 11}, {5, 5, 7, 9}};
         double[][] actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
         for (int i = 0; i < newPixels.length; i++)
         {
             for (int j = 0; j < newPixels[i].length; j++)
             {
-                actualHorizontalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+                actualHorizontalEnergies[i][j] = newPixels[i][j].getHorizontalEnergy();
             }
         }
+        System.out.println(Arrays.toString(actualHorizontalEnergies));
         assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
-        */
 
         assertEquals(imageWidth - 1, newPixels.length);
         assertEquals(imageHeight, newPixels[0].length);
@@ -167,19 +161,19 @@ class SeamCalculatorTest
         /*
         // remove a second seam
         Seam seam2 = seamCalculator.calculateHorizontalSeam(newPixels);
-        newPixels = seamCalculator.removeVerticalSeam(seam2, newPixels);
+        newPixels = seamCalculator.removeHorizontalSeam(seam2, newPixels);
 
         // expecting one row, four columns
-        expectedHorizontalEnergies = new double[][]{{3, 5, 8, 11}, {5, 5, 7, 9}};
+        //expectedHorizontalEnergies = new double[][]{{8, 11, 7, 9}};
         actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
         for (int i = 0; i < newPixels.length; i++)
         {
             for (int j = 0; j < newPixels[i].length; j++)
             {
-                actualHorizontalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+                actualHorizontalEnergies[i][j] = newPixels[i][j].getHorizontalEnergy();
             }
         }
-        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+        //assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
 
         assertEquals(imageWidth - 2, newPixels.length);
         assertEquals(imageHeight, newPixels[0].length);

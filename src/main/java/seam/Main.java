@@ -26,5 +26,7 @@ public class Main
         File seamOutputFile = new File("createdSeam.jpg");
         ImageIO.write(seamImage, "jpg", seamOutputFile);
         System.out.println("Image creation successful.");
+
+        // TODO: Make sure user knows that pixels MUST BE at least 2 x 2
     }
 }

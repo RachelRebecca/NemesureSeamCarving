@@ -5,37 +5,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EnergyCalculatorTest
 {
-    private static Pixel[][] pixels;
-    private static int imageWidth;
-    private static int imageHeight;
+    private Pixel[][] pixels;
+    private int imageWidth;
+    private int imageHeight;
+    private final int MAX = 255 * 255 * 6;
 
-    private static int max = 255 * 255 * 6;
-
-    @BeforeAll
-    public static void setUpValues()
+    @BeforeEach
+    public void setUpValues()
     {
         imageWidth = 3;
         imageHeight = 4;
         pixels = new Pixel[imageWidth][imageHeight];
         Color[] colors = new Color[]{
-                Color.RED,
-                Color.ORANGE,
-                Color.YELLOW,
-                Color.GREEN,
-                Color.BLUE,
-                Color.PINK,
-                Color.BLACK,
-                Color.WHITE,
-                Color.LIGHT_GRAY,
-                Color.DARK_GRAY,
-                Color.MAGENTA,
-                Color.CYAN
+                Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
+                Color.BLUE, Color.PINK, Color.BLACK, Color.WHITE,
+                Color.LIGHT_GRAY, Color.DARK_GRAY, Color.MAGENTA, Color.CYAN
         };
 
         int index = 0;
@@ -62,9 +51,9 @@ class EnergyCalculatorTest
         // then
 
         // some border pixels
-        assertEquals(max, pixels[0][0].getEnergy());
-        assertEquals(max, pixels[0][imageHeight - 1].getEnergy());
-        assertEquals(max, pixels[imageWidth - 1][0].getEnergy());
+        assertEquals(MAX, pixels[0][0].getEnergy());
+        assertEquals(MAX, pixels[0][imageHeight - 1].getEnergy());
+        assertEquals(MAX, pixels[imageWidth - 1][0].getEnergy());
 
         // middle pixel: pixels[1][1]
         Color top = pixels[0][1].getColor();
@@ -123,9 +112,9 @@ class EnergyCalculatorTest
                 pixels[0][imageWidth / 2].getVerticalEnergy());
 
         // middle pixels: pixels[1][1] and pixel[1][2]
-        assertEquals(pixels[1][1].getEnergy() + max,
+        assertEquals(pixels[1][1].getEnergy() + MAX,
                 pixels[1][1].getVerticalEnergy());
-        assertEquals(pixels[1][2].getEnergy() + max,
+        assertEquals(pixels[1][2].getEnergy() + MAX,
                 pixels[1][2].getVerticalEnergy());
 
         // bottom row
@@ -152,9 +141,9 @@ class EnergyCalculatorTest
 
         // then
         assertEquals(pixels[1][0].getEnergy(), pixels[1][0].getHorizontalEnergy());
-        assertEquals(pixels[1][1].getEnergy() + max,
+        assertEquals(pixels[1][1].getEnergy() + MAX,
                 pixels[1][1].getHorizontalEnergy());
-        assertEquals(pixels[0][1].getEnergy() + max, pixels[0][1].getHorizontalEnergy());
+        assertEquals(pixels[0][1].getEnergy() + MAX, pixels[0][1].getHorizontalEnergy());
         assertEquals(pixels[1][2].getEnergy() + pixels[1][1].getHorizontalEnergy(),
                pixels[1][2].getHorizontalEnergy());
     }
