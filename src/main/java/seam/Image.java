@@ -82,7 +82,7 @@ public class Image
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
                 newImageWidth, newImageHeight);
 
-        Pixel[][] newPixels = seamCalculator.calculateAndRemoveSeam();
+        Pixel[][] newPixels = seamCalculator.calculateAndRemoveSeams();
 
         try
         {

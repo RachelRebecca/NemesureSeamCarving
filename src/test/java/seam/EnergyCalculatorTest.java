@@ -1,6 +1,5 @@
 package seam;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ class EnergyCalculatorTest
     private Pixel[][] pixels;
     private int imageWidth;
     private int imageHeight;
-    private final int MAX = 255 * 255 * 6;
+    private final int max = 255 * 255 * 6;
 
     @BeforeEach
     public void setUpValues()
@@ -51,9 +50,9 @@ class EnergyCalculatorTest
         // then
 
         // some border pixels
-        assertEquals(MAX, pixels[0][0].getEnergy());
-        assertEquals(MAX, pixels[0][imageHeight - 1].getEnergy());
-        assertEquals(MAX, pixels[imageWidth - 1][0].getEnergy());
+        assertEquals(max, pixels[0][0].getEnergy());
+        assertEquals(max, pixels[0][imageHeight - 1].getEnergy());
+        assertEquals(max, pixels[imageWidth - 1][0].getEnergy());
 
         // middle pixel: pixels[1][1]
         Color top = pixels[0][1].getColor();
@@ -112,9 +111,9 @@ class EnergyCalculatorTest
                 pixels[0][imageWidth / 2].getVerticalEnergy());
 
         // middle pixels: pixels[1][1] and pixel[1][2]
-        assertEquals(pixels[1][1].getEnergy() + MAX,
+        assertEquals(pixels[1][1].getEnergy() + max,
                 pixels[1][1].getVerticalEnergy());
-        assertEquals(pixels[1][2].getEnergy() + MAX,
+        assertEquals(pixels[1][2].getEnergy() + max,
                 pixels[1][2].getVerticalEnergy());
 
         // bottom row
@@ -141,9 +140,9 @@ class EnergyCalculatorTest
 
         // then
         assertEquals(pixels[1][0].getEnergy(), pixels[1][0].getHorizontalEnergy());
-        assertEquals(pixels[1][1].getEnergy() + MAX,
+        assertEquals(pixels[1][1].getEnergy() + max,
                 pixels[1][1].getHorizontalEnergy());
-        assertEquals(pixels[0][1].getEnergy() + MAX, pixels[0][1].getHorizontalEnergy());
+        assertEquals(pixels[0][1].getEnergy() + max, pixels[0][1].getHorizontalEnergy());
         assertEquals(pixels[1][2].getEnergy() + pixels[1][1].getHorizontalEnergy(),
                pixels[1][2].getHorizontalEnergy());
     }

@@ -19,7 +19,7 @@ public class SeamCalculator
         this.horizontalSeams = new Seam[imageWidth - newImageWidth]; // y is implicit, x is explicit
     }
 
-    public Pixel[][] calculateAndRemoveSeam()
+    public Pixel[][] calculateAndRemoveSeams()
     {
         Pixel[][] newPixels = this.pixels;
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
