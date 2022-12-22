@@ -1,8 +1,116 @@
 package seam;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SeamCalculatorTest
 {
+    private static Pixel[][] pixels;
+    private static int imageWidth;
+    private static int imageHeight;
 
+    @BeforeAll
+    public static void setUpValues()
+    {
+        imageWidth = 3;
+        imageHeight = 4;
+        pixels = new Pixel[imageWidth][imageHeight];
+        Color[] colors = new Color[]{
+                Color.RED,
+                Color.ORANGE,
+                Color.YELLOW,
+                Color.GREEN,
+                Color.BLUE,
+                Color.PINK,
+                Color.BLACK,
+                Color.WHITE,
+                Color.LIGHT_GRAY,
+                Color.DARK_GRAY,
+                Color.MAGENTA,
+                Color.CYAN
+        };
+
+        double[] energies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
+        int counter = 0;
+        int index = 0;
+        for (int i = 0; i < pixels.length; i++)
+        {
+            for (int j = 0; j < pixels[i].length; j++)
+            {
+                pixels[i][j] = new Pixel(colors[index++].getRGB());
+                pixels[i][j].setVerticalEnergy(energies[counter++]);
+            }
+        }
+    }
+
+    @Test
+    public void calculateVerticalSeamTest()
+    {
+        // given
+        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+                imageWidth - 1, imageHeight);
+
+        // when
+        Seam seam = seamCalculator.calculateVerticalSeam(pixels);
+
+        // then
+        assertArrayEquals(new int[]{0, 1, 1}, seam.getFullSeam());
+    }
+
+    @Test
+    public void removeVerticalSeamTest()
+    {
+        // given
+        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+                imageWidth - 1, imageHeight);
+        // three rows, four columns
+        Seam seam1 = seamCalculator.calculateVerticalSeam(pixels);
+
+        // when
+        Pixel[][] newPixels = seamCalculator.removeVerticalSeam(seam1, pixels);
+
+        // then
+        // remove one seam
+
+        // expecting three rows, three columns
+        double[][] expectedVerticalEnergies = new double[][]{{4, 3, 5}, {4, 8, 4}, {8, 7, 6}};
+        double[][] actualVerticalEnergies = new double[newPixels.length][newPixels[0].length];
+        for (int i = 0; i < newPixels.length; i++)
+        {
+            for (int j = 0; j < newPixels[i].length; j++)
+            {
+                actualVerticalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+            }
+        }
+        assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
+
+        assertEquals(imageWidth, newPixels.length);
+        assertEquals(imageHeight - 1, newPixels[0].length);
+
+        // remove a second seam
+        Seam seam2 = seamCalculator.calculateVerticalSeam(newPixels);
+        newPixels = seamCalculator.removeVerticalSeam(seam2, newPixels);
+
+        // expecting three rows, two columns
+        expectedVerticalEnergies = new double[][]{{4, 5}, {4, 8}, {8, 7}};
+        actualVerticalEnergies = new double[newPixels.length][newPixels[0].length];
+        for (int i = 0; i < newPixels.length; i++)
+        {
+            for (int j = 0; j < newPixels[i].length; j++)
+            {
+                actualVerticalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+            }
+        }
+        assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
+
+        assertEquals(imageWidth, newPixels.length);
+        assertEquals(imageHeight - 2, newPixels[0].length);
+
+
+    }
 }
