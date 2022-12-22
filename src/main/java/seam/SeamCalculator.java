@@ -64,6 +64,19 @@ public class SeamCalculator
         int height = pixels[0].length;
         Pixel[][] newPixels = new Pixel[width][height];
 
+        /* Another idea
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0, pixelX = 0; x < height; x++, pixelX++)
+            {
+                if (y == seam.getSeam(x))
+                {
+                    pixelX++;
+                }
+                newPixels[x][y] = pixels[pixelX][y];
+            }
+        } */
+
         /*
         for (int x = 0, pixelX = 0; x < width; x++, pixelX++)
         {
