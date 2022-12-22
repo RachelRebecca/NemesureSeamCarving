@@ -60,7 +60,23 @@ public class SeamCalculator
 
     public Pixel[][] removeHorizontalSeam(Seam seam, Pixel[][] pixels)
     {
-        Pixel[][] newPixels = new Pixel[pixels.length - 1][pixels[0].length];
+        int width = pixels.length - 1;
+        int height = pixels[0].length;
+        Pixel[][] newPixels = new Pixel[width][height];
+
+        /*
+        for (int x = 0, pixelX = 0; x < width; x++, pixelX++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (x == seam.getSeam(y))
+                {
+                    pixelX++;
+                }
+                newPixels[x][y] = pixels[pixelX][y];
+            }
+        }*/
+
         return newPixels;
     }
 
@@ -113,12 +129,58 @@ public class SeamCalculator
             row--;
         }
 
-
         return seam;
     }
 
     public Seam calculateHorizontalSeam(Pixel[][] pixels)
     {
-        return new Seam(pixels[0].length);
+        Seam seam = new Seam(pixels[0].length);
+
+        int smallestIndex = 0;
+        for (int row = 0; row < pixels.length; row++)
+        {
+            if (pixels[row][pixels[0].length - 1].getVerticalEnergy()
+                    < pixels[smallestIndex][pixels[0].length - 1].getVerticalEnergy())
+            {
+                smallestIndex = row;
+            }
+        }
+
+        // add to last position the row of the last col
+        seam.addNewValue(pixels[0].length - 1, smallestIndex);
+
+        int col = pixels[0].length - 2;
+        while (col >= 0)
+        {
+            // keep building seam
+            double leftA = 255 * 255 * 255;
+            if (smallestIndex - 1 >= 0)
+            {
+                leftA = pixels[smallestIndex - 1][col].getHorizontalEnergy();
+            }
+
+            double leftB = pixels[smallestIndex][col].getHorizontalEnergy();
+
+            double leftC = 255 * 255 * 255;
+            if (smallestIndex + 1 < pixels[0].length)
+            {
+                leftC = pixels[smallestIndex + 1][col].getHorizontalEnergy();
+            }
+
+            int seamIndex = smallestIndex;
+            if (leftA < leftB && leftA < leftC)
+            {
+                seamIndex = smallestIndex - 1;
+                smallestIndex = seamIndex;
+            } else if (leftC < leftB && leftC < leftA)
+            {
+                seamIndex = smallestIndex + 1;
+                smallestIndex = seamIndex;
+            }
+            seam.addNewValue(col, seamIndex);
+            col--;
+        }
+
+        return seam;
     }
 }

@@ -35,7 +35,10 @@ class SeamCalculatorTest
                 Color.CYAN
         };
 
-        double[] energies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
+        double[] verticalEnergies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
+        double[] horizontalEnergies = new double[]{ 1, 5, 6, 11,
+                                                    3, 3, 8, 8,
+                                                    5, 5, 7, 9};
         int counter = 0;
         int index = 0;
         for (int i = 0; i < pixels.length; i++)
@@ -43,7 +46,8 @@ class SeamCalculatorTest
             for (int j = 0; j < pixels[i].length; j++)
             {
                 pixels[i][j] = new Pixel(colors[index++].getRGB());
-                pixels[i][j].setVerticalEnergy(energies[counter++]);
+                pixels[i][j].setVerticalEnergy(verticalEnergies[counter]);
+                pixels[i][j].setHorizontalEnergy(horizontalEnergies[counter++]);
             }
         }
     }
@@ -67,7 +71,7 @@ class SeamCalculatorTest
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
-                imageWidth - 1, imageHeight);
+                imageWidth, imageHeight - 1);
         // three rows, four columns
         Seam seam1 = seamCalculator.calculateVerticalSeam(pixels);
 
@@ -110,7 +114,73 @@ class SeamCalculatorTest
 
         assertEquals(imageWidth, newPixels.length);
         assertEquals(imageHeight - 2, newPixels[0].length);
+    }
 
+    @Test
+    public void calculateHorizontalSeam()
+    {
+        // given
+        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+                imageWidth - 1, imageHeight);
 
+        // when
+        Seam seam = seamCalculator.calculateHorizontalSeam(pixels);
+
+        // then
+        assertArrayEquals(new int[]{0, 1, 0, 1}, seam.getFullSeam());
+    }
+
+    @Test
+    public void removeHorizontalSeamTest()
+    {
+        // given
+        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+                imageWidth, imageHeight - 1);
+        // three rows, four columns
+        Seam seam1 = seamCalculator.calculateHorizontalSeam(pixels);
+
+        // when
+        Pixel[][] newPixels = seamCalculator.removeHorizontalSeam(seam1, pixels);
+
+        // then
+        // remove one seam
+
+        // expecting two rows, four columns
+        /*
+        double[][] expectedHorizontalEnergies = new double[][]{{4, 3, 5}, {4, 8, 4}, {8, 7, 6}};
+        double[][] actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
+        for (int i = 0; i < newPixels.length; i++)
+        {
+            for (int j = 0; j < newPixels[i].length; j++)
+            {
+                actualHorizontalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+            }
+        }
+        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+        */
+
+        assertEquals(imageWidth - 1, newPixels.length);
+        assertEquals(imageHeight, newPixels[0].length);
+
+        /*
+        // remove a second seam
+        Seam seam2 = seamCalculator.calculateHorizontalSeam(newPixels);
+        newPixels = seamCalculator.removeVerticalSeam(seam2, newPixels);
+
+        // expecting one row, four columns
+        expectedHorizontalEnergies = new double[][]{{3, 5, 8, 11}, {5, 5, 7, 9}};
+        actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
+        for (int i = 0; i < newPixels.length; i++)
+        {
+            for (int j = 0; j < newPixels[i].length; j++)
+            {
+                actualHorizontalEnergies[i][j] = newPixels[i][j].getVerticalEnergy();
+            }
+        }
+        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+
+        assertEquals(imageWidth - 2, newPixels.length);
+        assertEquals(imageHeight, newPixels[0].length);
+         */
     }
 }
