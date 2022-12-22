@@ -19,6 +19,11 @@ public class Seam
         this.seam[index] = value;
     }
 
+    public int[] getFullSeam()
+    {
+        return this.seam;
+    }
+
     @Override
     public String toString()
     {
