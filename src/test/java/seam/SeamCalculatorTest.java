@@ -35,6 +35,7 @@ class SeamCalculatorTest
                 Color.CYAN
         };
 
+        double[] energies = new double[]{1, 4, 3, 5, 3, 2, 5, 2, 5, 2, 4, 2};
         double[] verticalEnergies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
         double[] horizontalEnergies = new double[]{ 1, 5, 6, 11,
                                                     3, 3, 8, 8,
@@ -46,6 +47,7 @@ class SeamCalculatorTest
             for (int j = 0; j < pixels[i].length; j++)
             {
                 pixels[i][j] = new Pixel(colors[index++].getRGB());
+                pixels[i][j].setEnergy(energies[counter]);
                 pixels[i][j].setVerticalEnergy(verticalEnergies[counter]);
                 pixels[i][j].setHorizontalEnergy(horizontalEnergies[counter++]);
             }

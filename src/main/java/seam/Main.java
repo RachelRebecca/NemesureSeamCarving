@@ -26,6 +26,5 @@ public class Main
         File seamOutputFile = new File("createdSeam.jpg");
         ImageIO.write(seamImage, "jpg", seamOutputFile);
         System.out.println("Image creation successful.");
-
     }
 }

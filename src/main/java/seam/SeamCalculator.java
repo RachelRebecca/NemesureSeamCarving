@@ -175,7 +175,7 @@ public class SeamCalculator
             double leftB = pixels[smallestIndex][col].getHorizontalEnergy();
 
             double leftC = 255 * 255 * 255;
-            if (smallestIndex + 1 < pixels[0].length)
+            if (smallestIndex + 1 < pixels.length)
             {
                 leftC = pixels[smallestIndex + 1][col].getHorizontalEnergy();
             }
