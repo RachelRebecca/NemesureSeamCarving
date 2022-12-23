@@ -23,10 +23,10 @@ public class EnergyCalculator
         {
             for (int y = 1; y < imageHeight - 1; y++)
             {
-                Color top = (pixels[x][y + 1]).getColor();
-                Color bottom = (pixels[x][y - 1]).getColor();
-                Color left = (pixels[x - 1][y]).getColor();
-                Color right = (pixels[x + 1][y]).getColor();
+                Color top = (pixels[x - 1][y]).getColor();
+                Color bottom = (pixels[x + 1][y]).getColor();
+                Color left = (pixels[x][y - 1]).getColor();
+                Color right = (pixels[x][y + 1]).getColor();
 
                 double energy = ((top.getRed() - bottom.getRed())
                         * (top.getRed() - bottom.getRed()))

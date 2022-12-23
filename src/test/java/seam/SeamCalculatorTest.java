@@ -18,8 +18,8 @@ class SeamCalculatorTest
     @BeforeEach
     public void setUpValues()
     {
-        imageWidth = 3;
-        imageHeight = 4;
+        imageWidth = 4;
+        imageHeight = 3;
         pixels = new Pixel[imageWidth][imageHeight];
         Color[] colors = new Color[]{
                 Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
@@ -28,20 +28,32 @@ class SeamCalculatorTest
         };
 
         double[] energies = new double[]{1, 4, 3, 5, 3, 2, 5, 2, 5, 2, 4, 2};
-        double[] verticalEnergies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
+        double[] verticalEnergies = new double[]{1, 4, 3, 5,
+                                                 4, 3, 8, 4,
+                                                 8, 5, 7, 6};
         double[] horizontalEnergies = new double[]{1, 5, 6, 11, 3, 3, 8, 8, 5, 5, 7, 9};
         int counter = 0;
         int index = 0;
+        for (int i = 0; i < pixels[i].length; i++)
+        {
+            for (int j = 0; j < pixels.length; j++)
+            {
+                pixels[j][i] = new Pixel(colors[index++].getRGB());
+                pixels[j][i].setEnergy(energies[counter]);
+                pixels[j][i].setVerticalEnergy(verticalEnergies[counter]);
+                pixels[j][i].setHorizontalEnergy(horizontalEnergies[counter++]);
+            }
+        }
+
         for (int i = 0; i < pixels.length; i++)
         {
             for (int j = 0; j < pixels[i].length; j++)
             {
-                pixels[i][j] = new Pixel(colors[index++].getRGB());
-                pixels[i][j].setEnergy(energies[counter]);
-                pixels[i][j].setVerticalEnergy(verticalEnergies[counter]);
-                pixels[i][j].setHorizontalEnergy(horizontalEnergies[counter++]);
+                System.out.print("x=" + i + ", y=" + j + "," + pixels[i][j].getVerticalEnergy() + "\t\t");
             }
+            System.out.println();
         }
+        System.out.println();
     }
 
     @Test
@@ -89,8 +101,8 @@ class SeamCalculatorTest
             }
         }
 
-       assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
-       assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+        assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
+        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
         assertEquals(imageWidth - 2, newPixels.length);
         assertEquals(imageHeight - 2, newPixels[0].length);
 
@@ -115,16 +127,26 @@ class SeamCalculatorTest
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
-                imageWidth, imageHeight - 1);
-        // three rows, four columns
+                imageWidth - 1, imageHeight);
+        // four columns, three rows
         Seam seam1 = seamCalculator.calculateVerticalSeam(pixels);
 
         // when
         Pixel[][] newPixels = seamCalculator.removeVerticalSeam(seam1, pixels);
 
+        for (int i = 0; i < newPixels.length; i++)
+        {
+            for (int j = 0; j < newPixels[i].length; j++)
+            {
+                System.out.print("x=" + i + ", y=" + j + "," + newPixels[i][j].getVerticalEnergy() + "\t\t");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
         // then
         // expecting three rows, three columns
-        double[][] expectedVerticalEnergies = new double[][]{{4, 3, 5}, {4, 8, 4}, {8, 7, 6}};
+        double[][] expectedVerticalEnergies = new double[][]{{4, 4, 8}, {3, 8, 7}, {5, 4, 6}};
         double[][] actualVerticalEnergies = new double[newPixels.length][newPixels[0].length];
         for (int i = 0; i < newPixels.length; i++)
         {
@@ -135,8 +157,8 @@ class SeamCalculatorTest
         }
         assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
 
-        assertEquals(imageWidth, newPixels.length);
-        assertEquals(imageHeight - 1, newPixels[0].length);
+        assertEquals(imageWidth - 1, newPixels.length);
+        assertEquals(imageHeight, newPixels[0].length);
     }
 
     @Test

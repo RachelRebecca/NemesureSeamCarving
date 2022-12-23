@@ -5,8 +5,8 @@ public class SeamCalculator
     private final Pixel[][] pixels;
     private final Seam[] horizontalSeams;
     private final Seam[] verticalSeams;
-    private boolean shrinkingHeight;
-    private boolean shrinkingWidth;
+    private boolean shrinkingRows;
+    private boolean shrinkingColumns;
 
     public SeamCalculator(Pixel[][] pixels,
                           int imageWidth,
@@ -15,16 +15,18 @@ public class SeamCalculator
                           int newImageHeight)
     {
         this.pixels = pixels;
-        int height = imageHeight - newImageHeight;
-        shrinkingHeight = height >= 0;
-        int width = imageWidth - newImageWidth;
-        shrinkingWidth = width >= 0;
+
+        int numColsInSeam = imageWidth - newImageWidth;
+        shrinkingColumns = numColsInSeam >= 0;
+
+        int numRowsInSeam = imageHeight - newImageHeight;
+        shrinkingRows = numRowsInSeam >= 0;
 
         // x -> width, y -> height
-        // vertical seam: x is implicit, y is explicit, must specify height
-        this.verticalSeams = new Seam[Math.abs(height)];
-        // horizontal seam: y is implicit, x is explicit, must specify width
-        this.horizontalSeams = new Seam[Math.abs(width)];
+        // vertical seam: y is implicit, x is implicit, must specify width
+        this.verticalSeams = new Seam[Math.abs(numColsInSeam)];
+        // horizontal seam: x is implicit, y is explicit, must specify height
+        this.horizontalSeams = new Seam[Math.abs(numRowsInSeam)];
     }
 
     public Pixel[][] calculateAndRemoveSeams()
@@ -33,7 +35,7 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            if (shrinkingHeight)
+            if (shrinkingColumns)
             {
                 newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
             } else
@@ -44,7 +46,7 @@ public class SeamCalculator
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
-            if (shrinkingWidth)
+            if (shrinkingRows)
             {
                 newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
             } else
@@ -57,19 +59,22 @@ public class SeamCalculator
 
     public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
-        int width = pixels.length;
-        int height = pixels[0].length - 1;
+        int width = pixels.length - 1;
+        int height = pixels[0].length;
         Pixel[][] newPixels = new Pixel[width][height];
 
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0, pixelY = 0; y < height; y++, pixelY++)
+            for (int x = 0, pixelX = 0; x < width; x++, pixelX++)
             {
-                if (y == seam.getSeam(x))
+                if (x == seam.getSeam(y))
                 {
-                    pixelY++;
+                    pixelX++;
                 }
-                newPixels[x][y] = pixels[x][pixelY];
+                if (pixelX <= pixels.length - 1)
+                {
+                    newPixels[x][y] = pixels[pixelX][y];
+                }
             }
         }
 
@@ -129,11 +134,12 @@ public class SeamCalculator
         {
             for (int y = 0, pixelY = 0; y < pixels[0].length; y++, pixelY++)
             {
+                newPixels[x][pixelY] = pixels[x][y];
+
                 if (pixelY == seam.getSeam(x))
                 {
                     y--;
                 }
-                newPixels[x][y] = pixels[x][pixelY];
             }
         }
 
@@ -146,55 +152,58 @@ public class SeamCalculator
         int height = pixels[0].length;
         Pixel[][] newPixels = new Pixel[width][height];
 
-        for (int y = 0; y < height; y++)
+        for (int y = 0; y < pixels[0].length; y++)
         {
-            for (int x = 0, pixelX = 0; x < height; x++, pixelX++)
+            for (int x = 0, pixelX = 0; x < pixels.length; x++, pixelX++)
             {
-                if (y == seam.getSeam(x))
+                newPixels[pixelX][x] = pixels[x][y];
+
+                if (pixelX == seam.getSeam(y))
                 {
                     pixelX--;
                 }
-                newPixels[x][y] = pixels[pixelX][y];
             }
         }
+
 
         return newPixels;
     }
 
     public Seam calculateVerticalSeam(Pixel[][] pixels)
     {
-        Seam seam = new Seam(pixels.length);
+        Seam seam = new Seam(pixels[0].length);
 
         int smallestIndex = 0;
-        for (int col = 0; col < pixels[0].length; col++)
+        for (int col = 0; col < pixels.length; col++)
         {
-            if (pixels[pixels.length - 1][col].getVerticalEnergy()
-                    < pixels[pixels.length - 1][smallestIndex].getVerticalEnergy())
+            if (pixels[col][pixels[0].length - 1].getVerticalEnergy()
+                    < pixels[smallestIndex][pixels[0].length - 1].getVerticalEnergy())
             {
                 smallestIndex = col;
             }
         }
 
         // add to last position the col of the last row
-        seam.addNewValue(pixels.length - 1, smallestIndex);
+        seam.addNewValue(pixels[0].length - 1, smallestIndex);
 
-        int row = pixels.length - 2;
+        int row = pixels[0].length - 2;
         while (row >= 0)
         {
             // keep building seam
             double topA = 255 * 255 * 255;
             if (smallestIndex - 1 >= 0)
             {
-                topA = pixels[row][smallestIndex - 1].getVerticalEnergy();
+                topA = pixels[smallestIndex - 1][row].getVerticalEnergy();
             }
 
-            double topB = pixels[row][smallestIndex].getVerticalEnergy();
+            double topB = pixels[smallestIndex][row].getVerticalEnergy();
 
             double topC = 255 * 255 * 255;
-            if (smallestIndex + 1 < pixels[0].length)
+            if (smallestIndex + 1 < pixels.length)
             {
-                topC = pixels[row][smallestIndex + 1].getVerticalEnergy();
+                topC = pixels[smallestIndex + 1][row].getVerticalEnergy();
             }
+
 
             if (topA < topB && topA < topC)
             {
