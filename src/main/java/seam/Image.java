@@ -79,39 +79,18 @@ public class Image
         BufferedImage image = new BufferedImage(newImageWidth, newImageHeight,
                 BufferedImage.TYPE_INT_RGB);
 
-        Pixel[][] newPixels = pixels;
+        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+                newImageWidth, newImageHeight);
 
-        try
+        Pixel[][] newPixels = seamCalculator.calculateAndRemoveSeams();
+
+        for (int x = 0; x < newImageWidth; x++)
         {
-            SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
-                    newImageWidth, newImageHeight);
-
-            newPixels = seamCalculator.calculateAndRemoveSeams();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println("original width: " + imageWidth);
-        System.out.println("original height: " + imageHeight);
-        System.out.println("new width: " + newImageWidth);
-        System.out.println("new height: " + newImageHeight);
-        System.out.println("newPixel width: " + newPixels.length);
-        System.out.println("newPixel height: " + newPixels[0].length);
-
-        try
-        {
-            for (int x = 0; x < newImageWidth; x++)
+            for (int y = 0; y < newImageHeight; y++)
             {
-                for (int y = 0; y < newImageHeight; y++)
-                {
-                    Color color = newPixels[x][y].getColor();
-                    image.setRGB(x, y, color.getRGB());
-                }
+                Color color = newPixels[x][y].getColor();
+                image.setRGB(x, y, color.getRGB());
             }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
         }
 
         return image;

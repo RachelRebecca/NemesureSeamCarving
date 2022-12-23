@@ -15,7 +15,6 @@ public class Main
         int numRows = image.getWidth() - 400;
         int numCols = image.getHeight() - 400;
 
-
         BufferedImage seamImage = imageReader.generateSeamImage(numRows, numCols);
         File seamOutputFile = new File("createdSeam.jpg");
         ImageIO.write(seamImage, "jpg", seamOutputFile);
