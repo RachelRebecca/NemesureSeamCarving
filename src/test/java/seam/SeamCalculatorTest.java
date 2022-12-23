@@ -45,18 +45,6 @@ class SeamCalculatorTest
                 pixels[j][i].setHorizontalEnergy(horizontalEnergies[counter++]);
             }
         }
-
-        for (int i = 0; i < pixels.length; i++)
-        {
-            for (int j = 0; j < pixels[i].length; j++)
-            {
-                System.out.print("x=" + i + ", y=" + j + ", {"
-                        + pixels[i][j].getHorizontalEnergy() + ", "
-                        + pixels[i][j].getVerticalEnergy() + "}\t\t");
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     @Test
@@ -140,16 +128,6 @@ class SeamCalculatorTest
 
         // when
         Pixel[][] newPixels = seamCalculator.removeVerticalSeam(seam1, pixels);
-
-        for (int i = 0; i < newPixels.length; i++)
-        {
-            for (int j = 0; j < newPixels[i].length; j++)
-            {
-                System.out.print("x=" + i + ", y=" + j + "," + newPixels[i][j].getVerticalEnergy() + "\t\t");
-            }
-            System.out.println();
-        }
-        System.out.println();
 
         // then
         // expecting three rows, three columns
