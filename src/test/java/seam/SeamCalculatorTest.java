@@ -81,17 +81,19 @@ class SeamCalculatorTest
         {11, 5}, {8, 4}, {9, 6}
                 y
 
-         {H, V} - After removing vertical seams
-         {5, 4},  {3, 4}, {5, 8},
-    x    {11, 5}, {8, 8}, {7, 7},
+        {H, V} - After removing vertical seams - 2 columns, three rows
+        {5, 4},   {3, 4}, {5, 8},
+    x   {11, 5},  {8, 8}, {7, 7},
                 y
-         {H, V} - After removing horizontal seams
-    x    {11, 5}, {8, 8}
+
+         {H, V} - After removing horizontal seams - 2 columns, 1 row
+        {5, 4},
+    x   {11, 5},
                 y
         */
-        double[][] expectedVerticalEnergies = new double[][]{{5}, {8}};
+        double[][] expectedVerticalEnergies = new double[][]{{4}, {5}};
 
-        double[][] expectedHorizontalEnergies = new double[][]{{11}, {8}};
+        double[][] expectedHorizontalEnergies = new double[][]{{5}, {11}};
 
         double[][] actualVerticalEnergies = new double[newPixels.length][newPixels[0].length];
 
