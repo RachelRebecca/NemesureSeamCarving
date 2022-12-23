@@ -5,8 +5,6 @@ public class SeamCalculator
     private final Pixel[][] pixels;
     private final Seam[] horizontalSeams;
     private final Seam[] verticalSeams;
-    private boolean shrinkingRows;
-    private boolean shrinkingColumns;
 
     public SeamCalculator(Pixel[][] pixels,
                           int imageWidth,
@@ -17,10 +15,8 @@ public class SeamCalculator
         this.pixels = pixels;
 
         int numColsInSeam = imageWidth - newImageWidth;
-        shrinkingColumns = numColsInSeam >= 0;
 
         int numRowsInSeam = imageHeight - newImageHeight;
-        shrinkingRows = numRowsInSeam >= 0;
 
         // x -> width, y -> height
         // vertical seam: y is implicit, x is implicit, must specify width
@@ -35,24 +31,12 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            if (shrinkingColumns)
-            {
-                newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
-            } else
-            {
-                newPixels = addVerticalSeam(verticalSeams[verticalSeam], newPixels);
-            }
+            newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
-            if (shrinkingRows)
-            {
-                newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
-            } else
-            {
-                newPixels = addHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
-            }
+            newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
         }
         return newPixels;
     }

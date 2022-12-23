@@ -92,6 +92,13 @@ public class Image
             e.printStackTrace();
         }
 
+        System.out.println("original width: " + imageWidth);
+        System.out.println("original height: " + imageHeight);
+        System.out.println("new width: " + newImageWidth);
+        System.out.println("new height: " + newImageHeight);
+        System.out.println("newPixel width: " + newPixels.length);
+        System.out.println("newPixel height: " + newPixels[0].length);
+
         try
         {
             for (int x = 0; x < newImageWidth; x++)
