@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,9 @@ class SeamCalculatorTest
         double[] verticalEnergies = new double[]{1, 4, 3, 5,
                                                  4, 3, 8, 4,
                                                  8, 5, 7, 6};
-        double[] horizontalEnergies = new double[]{1, 5, 6, 11, 3, 3, 8, 8, 5, 5, 7, 9};
+        double[] horizontalEnergies = new double[]{1, 5, 6, 11,
+                                                    3, 3, 8, 8,
+                                                    5, 5, 7, 9};
         int counter = 0;
         int index = 0;
         for (int i = 0; i < pixels[i].length; i++)
@@ -49,7 +50,9 @@ class SeamCalculatorTest
         {
             for (int j = 0; j < pixels[i].length; j++)
             {
-                System.out.print("x=" + i + ", y=" + j + "," + pixels[i][j].getVerticalEnergy() + "\t\t");
+                System.out.print("x=" + i + ", y=" + j + ", {"
+                        + pixels[i][j].getHorizontalEnergy() + ", "
+                        + pixels[i][j].getVerticalEnergy() + "}\t\t");
             }
             System.out.println();
         }
@@ -67,26 +70,28 @@ class SeamCalculatorTest
         Pixel[][] newPixels = seamCalculator.calculateAndRemoveSeams();
 
         // then
-        // start with three rows and four columns
-        // remove two rows and two columns
-        // end should be 1 row, two columns
+        // start with four columns and three rows
+        // remove two columns and two rows
+        // end should be two columns, 1 row
         /*
         {H, V} - Before
-        {1, 1}, {5, 4}, {6, 3}, {11, 5},
-        {3, 4}, {3, 3}, {8, 8}, {8, 4},
-        {5, 8}, {5, 5}, {7, 7}, {9, 6}
+        {1, 1},  {3, 4}, {5, 8},
+    x   {5, 4},  {3, 3}, {5, 5},
+        {6, 3},  {8, 8}, {7, 7},
+        {11, 5}, {8, 4}, {9, 6}
+                y
 
          {H, V} - After removing vertical seams
-         {5, 4}, {11, 5}
-         {3, 4}, {8, 8}
-         {5, 8}, {7, 7}
-
+         {5, 4},  {3, 4}, {5, 8},
+    x    {11, 5}, {8, 8}, {7, 7},
+                y
          {H, V} - After removing horizontal seams
-         {5, 4}, {11, 5}
-         */
-        double[][] expectedVerticalEnergies = new double[][]{{4, 5}};
+    x    {11, 5}, {8, 8}
+                y
+        */
+        double[][] expectedVerticalEnergies = new double[][]{{5}, {8}};
 
-        double[][] expectedHorizontalEnergies = new double[][]{{5, 11}};
+        double[][] expectedHorizontalEnergies = new double[][]{{11}, {8}};
 
         double[][] actualVerticalEnergies = new double[newPixels.length][newPixels[0].length];
 
@@ -162,11 +167,11 @@ class SeamCalculatorTest
     }
 
     @Test
-    public void calculateHorizontalSeam()
+    public void calculateHorizontalSeamTest()
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
-                imageWidth - 1, imageHeight);
+                imageWidth, imageHeight - 1);
 
         // when
         Seam seam = seamCalculator.calculateHorizontalSeam(pixels);
@@ -181,15 +186,15 @@ class SeamCalculatorTest
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
                 imageWidth, imageHeight - 1);
-        // three rows, four columns
+        // four columns, three rows
         Seam seam1 = seamCalculator.calculateHorizontalSeam(pixels);
 
         // when
         Pixel[][] newPixels = seamCalculator.removeHorizontalSeam(seam1, pixels);
 
         // then
-        // expecting two rows, four columns
-        double[][] expectedHorizontalEnergies = new double[][]{{3, 5, 8, 11}, {5, 5, 7, 9}};
+        // expecting four columns, two rows
+        double[][] expectedHorizontalEnergies = new double[][]{{3, 5}, {5, 5}, {8, 7}, {11, 9}};
         double[][] actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
         for (int i = 0; i < newPixels.length; i++)
         {
@@ -198,10 +203,9 @@ class SeamCalculatorTest
                 actualHorizontalEnergies[i][j] = newPixels[i][j].getHorizontalEnergy();
             }
         }
-        System.out.println(Arrays.toString(actualHorizontalEnergies));
         assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
 
-        assertEquals(imageWidth - 1, newPixels.length);
-        assertEquals(imageHeight, newPixels[0].length);
+        assertEquals(imageWidth, newPixels.length);
+        assertEquals(imageHeight - 1, newPixels[0].length);
     }
 }
