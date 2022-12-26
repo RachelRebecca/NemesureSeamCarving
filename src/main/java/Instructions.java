@@ -11,7 +11,7 @@ public class Instructions
 
     public static void main(String[] args)
     {
-        try (InputStream seamImage = Instructions.class.getResourceAsStream("/seam.jpg") )
+        try (InputStream seamImage = Instructions.class.getResourceAsStream("/seam.jpg"))
         {
             // BufferedImage is a 2D array of pixels
 

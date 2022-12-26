@@ -27,12 +27,8 @@ class SeamCalculatorTest
         };
 
         double[] energies = new double[]{1, 4, 3, 5, 3, 2, 5, 2, 5, 2, 4, 2};
-        double[] verticalEnergies = new double[]{1, 4, 3, 5,
-                                                 4, 3, 8, 4,
-                                                 8, 5, 7, 6};
-        double[] horizontalEnergies = new double[]{1, 5, 6, 11,
-                                                    3, 3, 8, 8,
-                                                    5, 5, 7, 9};
+        double[] verticalEnergies = new double[]{1, 4, 3, 5, 4, 3, 8, 4, 8, 5, 7, 6};
+        double[] horizontalEnergies = new double[]{1, 5, 6, 11, 3, 3, 8, 8, 5, 5, 7, 9};
         int counter = 0;
         int index = 0;
         for (int i = 0; i < pixels[i].length; i++)
