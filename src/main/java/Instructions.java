@@ -1,26 +1,25 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ReadImage
+public class Instructions
 {
     // get the energy of each pixel = how important is this pixel
     // how much contrast is there between this pixel (RGB color, 4 bytes) and the neighboring pixels
 
     public static void main(String[] args)
     {
-        try (InputStream seamImage = ReadImage.class.getResourceAsStream("/seam.jpg") )
+        try (InputStream seamImage = Instructions.class.getResourceAsStream("/seam.jpg") )
         {
             // BufferedImage is a 2D array of pixels
 
             BufferedImage image = ImageIO.read(seamImage);
             Color color = new Color(image.getRGB(2, 4));
-            System.out.println(color.getBlue());
-            System.out.println(color.getRed());
-
+            System.out.println("red = " + color.getRed()
+                    + "\tblue = " + color.getBlue()
+                    + "\tgreen = " + color.getGreen());
             /*
             Algorithm:
               given an individual pixel, look at pixel on top, bottom, right, and left
