@@ -28,9 +28,9 @@ public class Seam
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < seam.length; i++)
+        for (int seamElement : seam)
         {
-            builder.append(seam[i]).append(" ");
+            builder.append(seamElement).append(" ");
         }
         return builder.toString();
     }

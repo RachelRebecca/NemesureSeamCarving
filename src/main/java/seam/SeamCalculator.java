@@ -108,51 +108,6 @@ public class SeamCalculator
         return newPixels;
     }
 
-    public Pixel[][] addVerticalSeam(Seam seam, Pixel[][] pixels)
-    {
-        int width = pixels.length;
-        int height = pixels[0].length + 1;
-        Pixel[][] newPixels = new Pixel[width][height];
-
-        for (int x = 0; x < pixels.length; x++)
-        {
-            for (int y = 0, pixelY = 0; y < pixels[0].length; y++, pixelY++)
-            {
-                newPixels[x][pixelY] = pixels[x][y];
-
-                if (pixelY == seam.getSeam(x))
-                {
-                    y--;
-                }
-            }
-        }
-
-        return newPixels;
-    }
-
-    public Pixel[][] addHorizontalSeam(Seam seam, Pixel[][] pixels)
-    {
-        int width = pixels.length + 1;
-        int height = pixels[0].length;
-        Pixel[][] newPixels = new Pixel[width][height];
-
-        for (int y = 0; y < pixels[0].length; y++)
-        {
-            for (int x = 0, pixelX = 0; x < pixels.length; x++, pixelX++)
-            {
-                newPixels[pixelX][x] = pixels[x][y];
-
-                if (pixelX == seam.getSeam(y))
-                {
-                    pixelX--;
-                }
-            }
-        }
-
-
-        return newPixels;
-    }
-
     public Seam calculateVerticalSeam(Pixel[][] pixels)
     {
         Seam seam = new Seam(pixels[0].length);
