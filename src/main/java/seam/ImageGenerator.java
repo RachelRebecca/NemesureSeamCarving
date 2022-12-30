@@ -5,16 +5,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
-public class Image
+public class ImageGenerator
 {
     private int imageWidth;
     private int imageHeight;
     private Pixel[][] pixels;
     private EnergyCalculator energyCalculator;
 
-    public Image(String imagePath)
+    public ImageGenerator(String imagePath)
     {
-        try (InputStream seamImage = Image.class.getResourceAsStream(imagePath))
+        try (InputStream seamImage = ImageGenerator.class.getResourceAsStream(imagePath))
         {
             BufferedImage image = ImageIO.read(seamImage);
 
@@ -50,7 +50,7 @@ public class Image
             for (int y = 0; y < imageHeight; y++)
             {
                 color = pixels[x][y].getColor();
-                image.setRGB(x, y, color.getRGB());  // saves pixel
+                image.setRGB(x, y, color.getRGB());
             }
         }
         return image;
