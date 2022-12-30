@@ -18,25 +18,36 @@ public class ImageGenerator
         {
             BufferedImage image = ImageIO.read(seamImage);
 
-            imageWidth = image.getWidth();
-            imageHeight = image.getHeight();
-            pixels = new Pixel[imageWidth][imageHeight];
-            for (int x = 0; x < imageWidth; x++)
-            {
-                for (int y = 0; y < imageHeight; y++)
-                {
-                    pixels[x][y] = new Pixel(image.getRGB(x, y));
-                }
-            }
+            setUpPixels(image);
 
-            energyCalculator = new EnergyCalculator(pixels, imageWidth, imageHeight);
-            energyCalculator.calculateEnergy();
-            energyCalculator.calculateVerticalEnergy();
-            energyCalculator.calculateHorizontalEnergy();
         } catch (Exception exception)
         {
             exception.printStackTrace();
         }
+    }
+
+    public ImageGenerator(BufferedImage image)
+    {
+        setUpPixels(image);
+    }
+
+    private void setUpPixels(BufferedImage image)
+    {
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        pixels = new Pixel[imageWidth][imageHeight];
+        for (int x = 0; x < imageWidth; x++)
+        {
+            for (int y = 0; y < imageHeight; y++)
+            {
+                pixels[x][y] = new Pixel(image.getRGB(x, y));
+            }
+        }
+
+        energyCalculator = new EnergyCalculator(pixels, imageWidth, imageHeight);
+        energyCalculator.calculateEnergy();
+        energyCalculator.calculateVerticalEnergy();
+        energyCalculator.calculateHorizontalEnergy();
     }
 
     public BufferedImage copyOriginalImage()

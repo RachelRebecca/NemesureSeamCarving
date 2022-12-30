@@ -11,6 +11,8 @@ public class ImageFrame extends JFrame
 {
     private final JLabel imageLabel;
     private ImageGenerator imageGenerator;
+    private final int maxWidth = 1428;
+    private final int maxHeight = 968;
 
     public ImageFrame()
     {
@@ -18,6 +20,9 @@ public class ImageFrame extends JFrame
 
         // This is where the image will be stored.
         imageLabel = new JLabel();
+
+        this.setMaximumSize(new Dimension(maxWidth, maxHeight + 50));
+        imageLabel.setMaximumSize(new Dimension(maxWidth, maxHeight));
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
@@ -59,7 +64,9 @@ public class ImageFrame extends JFrame
             File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
             try
             {
-                loadSeamImage(ImageIO.read(file));
+                BufferedImage image = ImageIO.read(file);
+                imageGenerator = new ImageGenerator(image);
+                loadSeamImage(image);
             } catch (IOException e)
             {
                 throw new RuntimeException(e);
