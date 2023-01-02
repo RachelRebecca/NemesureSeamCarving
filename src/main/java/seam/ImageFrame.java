@@ -3,6 +3,7 @@ package seam;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class ImageFrame extends JFrame
 
         JButton loadButton = new JButton("Load");
         northPanel.add(loadButton);
-        loadButton.addActionListener(event -> chooseFile());
+        loadButton.addActionListener(this::chooseFile);
 
         add(northPanel, BorderLayout.NORTH);
         add(imageLabel, BorderLayout.CENTER);
@@ -54,7 +55,7 @@ public class ImageFrame extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void chooseFile()
+    private void chooseFile(ActionEvent actionEvent)
     {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
@@ -69,7 +70,7 @@ public class ImageFrame extends JFrame
                 loadSeamImage(image);
             } catch (IOException e)
             {
-                throw new RuntimeException(e);
+                showError("Something went wrong: " + e.getMessage(), "Error!");
             }
         }
     }
