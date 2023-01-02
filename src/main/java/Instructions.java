@@ -1,26 +1,25 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ReadImage
+public class Instructions
 {
     // get the energy of each pixel = how important is this pixel
     // how much contrast is there between this pixel (RGB color, 4 bytes) and the neighboring pixels
 
     public static void main(String[] args)
     {
-        try (InputStream seamImage = ReadImage.class.getResourceAsStream("/seam.jpg") )
+        try (InputStream seamImage = Instructions.class.getResourceAsStream("/seam.jpg"))
         {
             // BufferedImage is a 2D array of pixels
 
             BufferedImage image = ImageIO.read(seamImage);
             Color color = new Color(image.getRGB(2, 4));
-            System.out.println(color.getBlue());
-            System.out.println(color.getRed());
-
+            System.out.println("red = " + color.getRed()
+                    + "\tblue = " + color.getBlue()
+                    + "\tgreen = " + color.getGreen());
             /*
             Algorithm:
               given an individual pixel, look at pixel on top, bottom, right, and left
@@ -62,7 +61,7 @@ public class ReadImage
               Display the 2D array as an image, borders are white
 
           List of seams:
-             lower energy is the least important - red lines on wikipedia page are teh seams,
+             lower energy is the least important - red lines on wikipedia page are the seams,
              none of which go through person or tower - each seam is 1 pixel wide
                     To change the width of the picture, use vertical seams
                     To change the height of the picture, use horizontal seams
@@ -93,13 +92,36 @@ public class ReadImage
              To make the image smaller, can remove the path with the lowest energies
              and should be removable without distorting image
 
-             This is for the vertical seams, and for the horizontal seams - 3 pixels left to right
+             This is for the vertical seams,
+             for the horizontal seams - 3 pixels left to right
+             --> the three pixels touching the pixel in the column before it
+             --> the border only has two values to the left
 
              Once you remove a seam, it changes everything else and some of your image has to be recomputed
 
              The algorithm can become inefficient
 
              -- USE graph paper to plan out utilizing the algorithm
+
+             Seam: (0, 1), (1, 1), (2, 1)
+             A seam is an array of ints [0, 1, 1]
+             For vertical seams, it's index 0 = 0, index 1 = 1, index 2 = 1
+
+             To remove seam = new array[width - 1][height]
+             Can loop through arrays and skip over value with seam
+
+             [Another idea: two copies per row - the horizontal version
+             up until the seam and after the seam and can use System.arraycopy]
+
+             Original image 100x100, to be resized to 90x90 then result
+             is 10 vertical seams and 10 horizontal seams
+             --> Recalculate all energy values and continue from there
+             Repeat x amount of times, and you've removed all seams
+
+             To remove the horizontal seam - flip rows and cols in for loop
+
+             Maybe class to determine the lowest seam given 2D energy array
+             SeamRemover class takes in 2D array and seam and returns a new 2D array
            */
 
 
