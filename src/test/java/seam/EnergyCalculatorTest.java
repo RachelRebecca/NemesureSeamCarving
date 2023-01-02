@@ -38,7 +38,7 @@ class EnergyCalculatorTest
     }
 
     @Test
-    public void calculateEnergyTest()
+    public void calculateEnergy()
     {
         // given
         EnergyCalculator energyCalculator
@@ -94,7 +94,7 @@ class EnergyCalculatorTest
     }
 
     @Test
-    public void calculateVerticalEnergyTest()
+    public void calculateVerticalEnergy()
     {
         // given
         EnergyCalculator energyCalculator
@@ -128,7 +128,7 @@ class EnergyCalculatorTest
     }
 
     @Test
-    public void calculateHorizontalEnergyTest()
+    public void calculateHorizontalEnergy()
     {
         // given
         EnergyCalculator energyCalculator
@@ -148,7 +148,7 @@ class EnergyCalculatorTest
     }
 
     @Test
-    public void calculateBrightnessTest()
+    public void calculateBrightness()
     {
         // given
         EnergyCalculator energyCalculator =
