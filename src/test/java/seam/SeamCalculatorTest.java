@@ -100,7 +100,7 @@ class SeamCalculatorTest
     }
 
     @Test
-    public void calculateVerticalSeamTest()
+    public void calculateVerticalSeam()
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
@@ -114,7 +114,7 @@ class SeamCalculatorTest
     }
 
     @Test
-    public void removeVerticalSeamTest()
+    public void removeVerticalSeam()
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
@@ -143,7 +143,7 @@ class SeamCalculatorTest
     }
 
     @Test
-    public void calculateHorizontalSeamTest()
+    public void calculateHorizontalSeam()
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
@@ -157,7 +157,7 @@ class SeamCalculatorTest
     }
 
     @Test
-    public void removeHorizontalSeamTest()
+    public void removeHorizontalSeam()
     {
         // given
         SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
