@@ -14,9 +14,18 @@ public class ImageGenerator
 
     public ImageGenerator(String imagePath)
     {
-        try (InputStream seamImage = ImageGenerator.class.getResourceAsStream(imagePath))
+        try (InputStream seamImage = ImageGenerator.class.getResourceAsStream("../" + imagePath);
+             InputStream jarSeamImage = ImageGenerator.class.getClassLoader().
+                             getResourceAsStream("../resources/" + imagePath))
         {
-            BufferedImage image = ImageIO.read(seamImage);
+            BufferedImage image;
+            try
+            {
+                image = ImageIO.read(seamImage);
+            } catch (Exception e)
+            {
+                image = ImageIO.read(jarSeamImage);
+            }
 
             setUpPixels(image);
 

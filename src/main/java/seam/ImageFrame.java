@@ -18,6 +18,7 @@ public class ImageFrame extends JFrame
     public ImageFrame()
     {
         setLayout(new BorderLayout());
+        setMinimumSize(new Dimension(200, 65));
 
         // This is where the image will be stored.
         imageLabel = new JLabel();
@@ -44,7 +45,7 @@ public class ImageFrame extends JFrame
 
         try
         {
-            imageGenerator = new ImageGenerator("../seam.jpg");
+            imageGenerator = new ImageGenerator("seam.jpg");
             loadSeamImage(imageGenerator.copyOriginalImage());
         } catch (Exception exc)
         {
