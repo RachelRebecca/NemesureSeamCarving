@@ -159,9 +159,6 @@ class EnergyCalculatorTest
         assertEquals(0, brightness1);
         assertEquals(255, brightness2);
         assertEquals(255, brightness3);
-
-        //assertEquals(142850, energyCalculator.maxEnergy);
-       // assertEquals(124098, energyCalculator.minEnergy);
         assertEquals(145875, pixels[1][1].getEnergy());
         assertEquals(155394, pixels[1][2].getEnergy());
     }
