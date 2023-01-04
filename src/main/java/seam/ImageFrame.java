@@ -45,10 +45,11 @@ public class ImageFrame extends JFrame
 
         try
         {
-            imageGenerator = new ImageGenerator("seam.jpg");
+            imageGenerator = new ImageGenerator("/candy.jpg");
             loadSeamImage(imageGenerator.copyOriginalImage());
         } catch (Exception exc)
         {
+            exc.printStackTrace();
             showError("Something went wrong: " + exc.getMessage(), "Error!");
         }
 
@@ -69,9 +70,10 @@ public class ImageFrame extends JFrame
                 BufferedImage image = ImageIO.read(file);
                 imageGenerator = new ImageGenerator(image);
                 loadSeamImage(image);
-            } catch (IOException e)
+            } catch (IOException exc)
             {
-                showError("Something went wrong: " + e.getMessage(), "Error!");
+                exc.printStackTrace();
+                showError("Something went wrong: " + exc.getMessage(), "Error!");
             }
         }
     }
@@ -98,6 +100,7 @@ public class ImageFrame extends JFrame
                 imageLabel.setIcon(new ImageIcon(img));
             } catch (Exception exc)
             {
+                exc.printStackTrace();
                 showError("Something went wrong: " + exc.getMessage(), "Error!");
             }
         } else

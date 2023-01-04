@@ -14,9 +14,9 @@ public class ImageGenerator
 
     public ImageGenerator(String imagePath)
     {
-        try (InputStream seamImage = ImageGenerator.class.getResourceAsStream("../" + imagePath);
+        try (InputStream seamImage = ImageGenerator.class.getResourceAsStream(imagePath);
              InputStream jarSeamImage = ImageGenerator.class.getClassLoader()
-                     .getResourceAsStream("../resources/" + imagePath))
+                     .getResourceAsStream(imagePath))
         {
             BufferedImage image;
             try
@@ -44,16 +44,16 @@ public class ImageGenerator
     {
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
-        pixels = new Pixel[imageWidth][imageHeight];
+        pixels = new Pixel[imageHeight][imageWidth];
         for (int x = 0; x < imageWidth; x++)
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                pixels[x][y] = new Pixel(image.getRGB(x, y));
+                pixels[y][x] = new Pixel(image.getRGB(x, y));
             }
         }
 
-        energyCalculator = new EnergyCalculator(pixels, imageWidth, imageHeight);
+        energyCalculator = new EnergyCalculator(pixels);
         energyCalculator.calculateEnergy();
         energyCalculator.calculateVerticalEnergy();
         energyCalculator.calculateHorizontalEnergy();
@@ -69,7 +69,7 @@ public class ImageGenerator
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                color = pixels[x][y].getColor();
+                color = pixels[y][x].getColor();
                 image.setRGB(x, y, color.getRGB());
             }
         }
@@ -86,7 +86,7 @@ public class ImageGenerator
         {
             for (int y = 0; y < imageHeight; y++)
             {
-                int brightness = energyCalculator.calculateBrightness(pixels[x][y]);
+                int brightness = energyCalculator.calculateBrightness(pixels[y][x]);
                 color = new Color(brightness, brightness, brightness);
                 image.setRGB(x, y, color.getRGB());
             }
@@ -108,7 +108,7 @@ public class ImageGenerator
         {
             for (int y = 0; y < newImageHeight; y++)
             {
-                Color color = newPixels[x][y].getColor();
+                Color color = newPixels[y][x].getColor();
                 image.setRGB(x, y, color.getRGB());
             }
         }
