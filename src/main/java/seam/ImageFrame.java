@@ -45,7 +45,7 @@ public class ImageFrame extends JFrame
 
         try
         {
-            imageGenerator = new ImageGenerator("/candy.jpg");
+            imageGenerator = new ImageGenerator("/seam.jpg");
             loadSeamImage(imageGenerator.copyOriginalImage());
         } catch (Exception exc)
         {

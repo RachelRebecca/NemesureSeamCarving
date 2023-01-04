@@ -142,7 +142,7 @@ public class SeamCalculator
             double topB = pixels[row][smallestIndex].getVerticalEnergy();
 
             double topC = 255 * 255 * 255;
-            if (smallestIndex + 1 < numRows)
+            if (smallestIndex + 1 < numCols)
             {
                 topC = pixels[row][smallestIndex + 1].getVerticalEnergy();
             }

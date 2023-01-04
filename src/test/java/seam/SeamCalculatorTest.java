@@ -82,11 +82,11 @@ class SeamCalculatorTest
         {8, 5}, {7, 7}, {6, 9}
 
         after removing horizontal seams
-        {8, 5}, {8, 8}, {6, 9}
+        {8, 5}, {8, 8}, {5, 11}
          */
-        double[][] expectedVerticalEnergies = new double[][]{{8, 8, 6}};
+        double[][] expectedVerticalEnergies = new double[][]{{8, 8, 5}};
 
-        double[][] expectedHorizontalEnergies = new double[][]{{5, 8, 9}};
+        double[][] expectedHorizontalEnergies = new double[][]{{5, 8, 11}};
 
         int numNewRows = newPixels.length;
         int numNewCols = newPixels[0].length;
