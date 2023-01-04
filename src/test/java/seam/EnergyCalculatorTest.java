@@ -53,42 +53,10 @@ class EnergyCalculatorTest
         assertEquals(max, pixels[pixels.length - 1][0].getEnergy());
 
         // middle pixel: pixels[1][1]
-        Color top = pixels[0][1].getColor();
-        Color bottom = pixels[2][1].getColor();
-        Color left = pixels[1][0].getColor();
-        Color right = pixels[1][2].getColor();
-        double energy = ((top.getRed() - bottom.getRed())
-                * (top.getRed() - bottom.getRed()))
-                + ((top.getGreen() - bottom.getGreen())
-                * (top.getGreen() - bottom.getGreen()))
-                + ((top.getBlue() - bottom.getBlue())
-                * (top.getBlue() - bottom.getBlue()))
-                + ((left.getRed() - right.getRed())
-                * (left.getRed() - right.getRed()))
-                + ((left.getGreen() - right.getGreen())
-                * (left.getGreen() - right.getGreen()))
-                + ((left.getBlue() - right.getBlue())
-                * (left.getBlue() - right.getBlue()));
-        assertEquals(energy, pixels[1][1].getEnergy());
+        assertEquals(145875, pixels[1][1].getEnergy());
 
         // middle pixel: pixels[1][2]
-        top = pixels[0][2].getColor();
-        bottom = pixels[2][2].getColor();
-        left = pixels[1][1].getColor();
-        right = pixels[1][3].getColor();
-        energy = ((top.getRed() - bottom.getRed())
-                * (top.getRed() - bottom.getRed()))
-                + ((top.getGreen() - bottom.getGreen())
-                * (top.getGreen() - bottom.getGreen()))
-                + ((top.getBlue() - bottom.getBlue())
-                * (top.getBlue() - bottom.getBlue()))
-                + ((left.getRed() - right.getRed())
-                * (left.getRed() - right.getRed()))
-                + ((left.getGreen() - right.getGreen())
-                * (left.getGreen() - right.getGreen()))
-                + ((left.getBlue() - right.getBlue())
-                * (left.getBlue() - right.getBlue()));
-        assertEquals(energy, pixels[1][2].getEnergy());
+        assertEquals(155394, pixels[1][2].getEnergy());
     }
 
     @Test
@@ -159,7 +127,5 @@ class EnergyCalculatorTest
         assertEquals(0, brightness1);
         assertEquals(255, brightness2);
         assertEquals(255, brightness3);
-        assertEquals(145875, pixels[1][1].getEnergy());
-        assertEquals(155394, pixels[1][2].getEnergy());
     }
 }

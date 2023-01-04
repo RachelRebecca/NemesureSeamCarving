@@ -1,0 +1,44 @@
+Seam remover test explanation -
+remove 2 vertical seams and 2 horizontal seams
+note: {vertical energy, horizontal energy, color}
+
+start with three rows, five columns
+{1, 1, RED},     {4, 5, ORANGE}, {3, 6, YELLOW},     {5, 11, GREEN},      {2, 10, BLUE},
+{4, 3, PINK},    {3, 3, BLACK},  {8, 8, WHITE},      {4, 8, LIGHT_GRAY},  {5, 11, DARK_GRAY},
+{8, 5, MAGENTA}, {5, 5, CYAN},   {7, 7, LIGHT_GRAY}, {6, 9, DARK_GRAY},   {5, 9, MAGENTA}
+
+removing vertical seam 1
+{4, 5, ORANGE},   {3, 6, YELLOW},     {5, 11, GREEN},      {2, 10, BLUE},
+{4, 3, PINK},     {8, 8, WHITE},      {4, 8, LIGHT_GRAY},  {5, 11, DARK_GRAY},
+{8, 5, MAGENTA},  {7, 7, LIGHT_GRAY}, {6, 9, DARK_GRAY},   {5, 9, MAGENTA}
+
+recalculate
+{4, 4, ORANGE},   {3, 6, YELLOW},          {5, 11, GREEN},                {2, 10, BLUE},
+{6, 3, PINK},     {49352, 49352, WHITE},   {154118, 154122, LIGHT_GRAY},  {5, 12, DARK_GRAY},
+{11, 5, MAGENTA}, {10, 7, LIGHT_GRAY},     {7, 9, DARK_GRAY},             {6, 10, MAGENTA}
+
+remove vertical seam 2
+{4, 4, ORANGE},   {3, 6, YELLOW},          {5, 11, GREEN},
+{6, 3, PINK},     {49352, 49352, WHITE},   {154118, 154122, LIGHT_GRAY},
+{11, 5, MAGENTA}, {10, 7, LIGHT_GRAY},     {7, 9, DARK_GRAY}
+
+recalculate
+{4, 4, ORANGE},   {3, 6, YELLOW},          {5, 11, GREEN},
+{6, 3, PINK},     {49352, 49352, WHITE},   {154119, 154122, LIGHT_GRAY},
+{11, 5, MAGENTA}, {10, 7, LIGHT_GRAY},     {49354, 9, DARK_GRAY}
+
+remove horizontal seam #1
+{4, 4, ORANGE},    {3, 6, YELLOW},          {5, 11, GREEN},
+{11, 5, MAGENTA},  {49352, 49352, WHITE},   {154119, 154122, LIGHT_GRAY}
+
+recalculate
+{4, 4, ORANGE},    {3, 7, YELLOW},          {5, 12, GREEN},
+{8, 5, MAGENTA},   {49352, 49353, WHITE},   {154119, 154123, LIGHT_GRAY}
+
+remove horizontal seam #2
+{8, 5, MAGENTA},   {49352, 49353, WHITE},   {154119, 154123, LIGHT_GRAY}
+
+recalculate
+{5, 5, MAGENTA},   {49349, 49354, WHITE},   {154116, 203470, LIGHT_GRAY}
+
+end with one row, three columns

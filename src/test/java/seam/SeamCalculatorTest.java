@@ -67,43 +67,20 @@ class SeamCalculatorTest
 
         // then
         // start with three rows and five columns
-        // remove two rows, two columns
-        // end should be 1 row, 3 columns
-
-        /*
-        {v, h}
-        {1, 1}, {4, 5}, {3, 6}, {5, 11}, {2, 10},
-        {4, 3}, {3, 3}, {8, 8}, {4, 8},  {5, 11},
-        {8, 5}, {5, 5}, {7, 7}, {6, 9},  {5, 9}
-
-        after removing vertical seams
-        {4, 5}, {3, 6}, {5, 11},
-        {4, 3}, {8, 8}, {5, 11},
-        {8, 5}, {7, 7}, {6, 9}
-
-        after removing horizontal seams
-        {8, 5}, {8, 8}, {5, 11}
-         */
-        double[][] expectedVerticalEnergies = new double[][]{{8, 8, 5}};
-
-        double[][] expectedHorizontalEnergies = new double[][]{{5, 8, 11}};
-
-        int numNewRows = newPixels.length;
-        int numNewCols = newPixels[0].length;
-        double[][] actualVerticalEnergies = new double[numNewRows][numNewCols];
-        double[][] actualHorizontalEnergies = new double[numNewRows][numNewCols];
-
-        for (int row = 0; row < numNewRows; row++)
+        // remove two rows, two columns, recalculate energies each time
+        // expecting one row, three columns
+        Color[][] expectedColors = new Color[][]{{MAGENTA, WHITE, LIGHT_GRAY}};
+        int height = newPixels[0].length;
+        int width = newPixels.length;
+        Color[][] actualColors = new Color[width][height];
+        for (int i = 0; i < width; i++)
         {
-            for (int col = 0; col < newPixels[0].length; col++)
+            for (int j = 0; j < height; j++)
             {
-                actualVerticalEnergies[row][col] = newPixels[row][col].getVerticalEnergy();
-                actualHorizontalEnergies[row][col] = newPixels[row][col].getHorizontalEnergy();
+                actualColors[i][j] = newPixels[i][j].getColor();
             }
         }
-
-        assertArrayEquals(expectedVerticalEnergies, actualVerticalEnergies);
-        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+        assertArrayEquals(expectedColors, actualColors);
     }
 
     @Test
@@ -138,7 +115,6 @@ class SeamCalculatorTest
 
         // then
         // expecting three rows, four columns
-
         Color[][] expectedColors = new Color[][]{
                 {ORANGE, YELLOW, GREEN, BLUE},
                 {PINK, WHITE, LIGHT_GRAY, DARK_GRAY},
@@ -189,15 +165,20 @@ class SeamCalculatorTest
 
         // then
         // expecting two rows, five columns
-        double[][] expectedHorizontalEnergies = new double[][]{{3, 5, 8, 11, 10}, {5, 5, 7, 9, 11}};
-        double[][] actualHorizontalEnergies = new double[newPixels.length][newPixels[0].length];
-        for (int i = 0; i < newPixels.length; i++)
+        Color[][] expectedColors = new Color[][]{
+                {PINK, ORANGE, WHITE, GREEN, BLUE},
+                {MAGENTA, CYAN, LIGHT_GRAY, DARK_GRAY, DARK_GRAY}
+        };
+        int height = newPixels[0].length;
+        int width = newPixels.length;
+        Color[][] actualColors = new Color[width][height];
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < newPixels[i].length; j++)
+            for (int j = 0; j < height; j++)
             {
-                actualHorizontalEnergies[i][j] = newPixels[i][j].getHorizontalEnergy();
+                actualColors[i][j] = newPixels[i][j].getColor();
             }
         }
-        assertArrayEquals(expectedHorizontalEnergies, actualHorizontalEnergies);
+        assertArrayEquals(expectedColors, actualColors);
     }
 }

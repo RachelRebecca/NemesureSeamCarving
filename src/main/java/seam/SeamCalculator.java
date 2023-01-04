@@ -31,14 +31,27 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
+            newPixels = recalculate(removeVerticalSeam(verticalSeams[verticalSeam], newPixels));
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
-            newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
+            newPixels = recalculate(removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels));
         }
         return newPixels;
+    }
+
+    private Pixel[][] recalculate(Pixel[][] pixels)
+    {
+        EnergyCalculator energyCalculator = new EnergyCalculator(pixels);
+
+        // recalculate all energy values
+        energyCalculator.calculateEnergy();
+        energyCalculator.calculateVerticalEnergy();
+        energyCalculator.calculateHorizontalEnergy();
+
+        return pixels;
+
     }
 
     public Seam calculateVerticalSeam(Pixel[][] pixels)
@@ -50,7 +63,6 @@ public class SeamCalculator
         Seam seam = new Seam(numRows);
 
         int smallestIndex = 0;
-        System.out.println(pixels[bottomRow][0]);
         for (int col = 0; col < numCols; col++)
         {
             if (pixels[bottomRow][col].getVerticalEnergy()
