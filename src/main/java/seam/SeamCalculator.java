@@ -192,37 +192,18 @@ public class SeamCalculator
         int numCols = pixels[0].length;
         Pixel[][] newPixels = new Pixel[numRows][numCols];
 
-        // replace all seam elements with null
-        for (int row = 0; row < pixels.length; row++)
+        for (int col = 0; col < numCols; col++)
         {
-            for (int col = 0; col < numCols; col++)
+            for (int row = 0, pixelRow = 0; row < numRows; row++, pixelRow++)
             {
                 if (row == seam.getSeam(col))
                 {
-                    pixels[row][col] = null;
+                    pixelRow++;
                 }
-            }
-        }
-
-        // move all pixels up one row
-        for (int row = 1; row < pixels.length; row++)
-        {
-            for (int col = 0; col < numCols; col++)
-            {
-                if (pixels[row - 1][col] == null)
+                if (pixelRow <= numRows)
                 {
-                    pixels[row - 1][col] = pixels[row][col];
-                    pixels[row][col] = null;
+                    newPixels[row][col] = pixels[pixelRow][col];
                 }
-            }
-        }
-
-        // set newPixels = pixels all the way until the last row
-        for (int row = 0; row < numRows; row++)
-        {
-            for (int col = 0; col < numCols; col++)
-            {
-                newPixels[row][col] = pixels[row][col];
             }
         }
 

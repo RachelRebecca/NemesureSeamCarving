@@ -99,7 +99,17 @@ public class ImageGenerator
         BufferedImage image = new BufferedImage(newImageWidth, newImageHeight,
                 BufferedImage.TYPE_INT_RGB);
 
-        SeamCalculator seamCalculator = new SeamCalculator(pixels, imageWidth, imageHeight,
+        Pixel[][] origPixels = new Pixel[imageHeight][imageWidth];
+        for (int i = 0; i < imageHeight; i++)
+        {
+            for (int j = 0; j < imageWidth; j++)
+            {
+                origPixels[i][j] = pixels[i][j];
+            }
+        }
+
+        SeamCalculator seamCalculator = new SeamCalculator(origPixels,
+                imageWidth, imageHeight,
                 newImageWidth, newImageHeight);
 
         Pixel[][] newPixels = seamCalculator.calculateAndRemoveSeams();
