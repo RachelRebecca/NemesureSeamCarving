@@ -31,12 +31,14 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            newPixels = recalculate(removeVerticalSeam(verticalSeams[verticalSeam], newPixels));
+            Seam seam = verticalSeams[verticalSeam];
+            newPixels = recalculate(removeVerticalSeam(seam, newPixels));
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
-            newPixels = recalculate(removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels));
+            Seam seam = horizontalSeams[horizontalSeam];
+            newPixels = recalculate(removeHorizontalSeam(seam, newPixels));
         }
         return newPixels;
     }

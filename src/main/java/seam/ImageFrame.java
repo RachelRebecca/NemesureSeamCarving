@@ -28,9 +28,14 @@ public class ImageFrame extends JFrame
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
+
+
         JButton resizeButton = new JButton("Resize");
         resizeButton.addActionListener(event ->
         {
+            // Shows user that image generator is loading
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
             // This will set the image based on the current size of the label
             setSeamImageSize(imageLabel.getWidth(), imageLabel.getHeight());
         });
@@ -82,7 +87,6 @@ public class ImageFrame extends JFrame
     {
         // load the image into your seam carver code
         imageLabel.setIcon(new ImageIcon(image));
-
         setSize(image.getWidth(), image.getHeight());
         pack();
     }
@@ -98,6 +102,8 @@ public class ImageFrame extends JFrame
             {
                 BufferedImage img = imageGenerator.generateSeamImage(width, height);
                 imageLabel.setIcon(new ImageIcon(img));
+
+                setCursor(null); //turn off the wait cursor
             } catch (Exception exc)
             {
                 exc.printStackTrace();

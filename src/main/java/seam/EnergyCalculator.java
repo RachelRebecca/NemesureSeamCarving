@@ -39,14 +39,8 @@ public class EnergyCalculator
 
                 pixels[row][col].setEnergy(energy);
 
-                if (energy < minEnergy)
-                {
-                    minEnergy = energy;
-                }
-                if (energy > maxEnergy)
-                {
-                    maxEnergy = energy;
-                }
+                minEnergy = Math.min(energy, minEnergy);
+                maxEnergy = Math.max(energy, maxEnergy);
             }
         }
     }
