@@ -49,7 +49,7 @@ public class SeamCalculator
     {
         EnergyCalculator energyCalculator = new EnergyCalculator(pixels);
 
-        // recalculate all energy values
+        // recalculate energy values
         energyCalculator.calculateEnergy();
 
         switch (orientation)
@@ -59,6 +59,9 @@ public class SeamCalculator
                 break;
             case HORIZONTAL:
                 energyCalculator.calculateHorizontalEnergy();
+                break;
+            default:
+                // do nothing
                 break;
         }
 
