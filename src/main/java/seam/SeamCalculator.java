@@ -39,8 +39,7 @@ public class SeamCalculator
             {
                 // simply recalculate vertical energies
                 recalculate(newPixels, VERTICAL);
-            }
-            else
+            } else
             {
                 // recalculate horizontal in preparation for the horizontal seam for loop
                 recalculate(newPixels, HORIZONTAL);
