@@ -1,5 +1,7 @@
 package seam;
 
+import static seam.Orientation.*;
+
 public class SeamCalculator
 {
     private final Pixel[][] pixels;
@@ -32,25 +34,33 @@ public class SeamCalculator
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
             Seam seam = verticalSeams[verticalSeam];
-            newPixels = recalculate(removeVerticalSeam(seam, newPixels));
+            newPixels = recalculate(removeVerticalSeam(seam, newPixels), VERTICAL);
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
             Seam seam = horizontalSeams[horizontalSeam];
-            newPixels = recalculate(removeHorizontalSeam(seam, newPixels));
+            newPixels = recalculate(removeHorizontalSeam(seam, newPixels), HORIZONTAL);
         }
         return newPixels;
     }
 
-    private Pixel[][] recalculate(Pixel[][] pixels)
+    private Pixel[][] recalculate(Pixel[][] pixels, Orientation orientation)
     {
         EnergyCalculator energyCalculator = new EnergyCalculator(pixels);
 
         // recalculate all energy values
         energyCalculator.calculateEnergy();
-        energyCalculator.calculateVerticalEnergy();
-        energyCalculator.calculateHorizontalEnergy();
+
+        switch (orientation)
+        {
+            case VERTICAL:
+                energyCalculator.calculateVerticalEnergy();
+                break;
+            case HORIZONTAL:
+                energyCalculator.calculateHorizontalEnergy();
+                break;
+        }
 
         return pixels;
 

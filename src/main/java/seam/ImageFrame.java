@@ -38,6 +38,8 @@ public class ImageFrame extends JFrame
 
             // This will set the image based on the current size of the label
             setSeamImageSize(imageLabel.getWidth(), imageLabel.getHeight());
+
+            setCursor(null); //turn off the wait cursor
         });
         northPanel.add(resizeButton);
 
@@ -102,8 +104,6 @@ public class ImageFrame extends JFrame
             {
                 BufferedImage img = imageGenerator.generateSeamImage(width, height);
                 imageLabel.setIcon(new ImageIcon(img));
-
-                setCursor(null); //turn off the wait cursor
             } catch (Exception exc)
             {
                 exc.printStackTrace();
