@@ -34,13 +34,29 @@ public class SeamCalculator
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
             Seam seam = verticalSeams[verticalSeam];
-            newPixels = recalculate(removeVerticalSeam(seam, newPixels), VERTICAL);
+            newPixels = removeVerticalSeam(seam, newPixels);
+            if (verticalSeam < this.verticalSeams.length - 1)
+            {
+                // simply recalculate vertical energies
+                recalculate(newPixels, VERTICAL);
+            }
+            else
+            {
+                // recalculate horizontal in preparation for the horizontal seam for loop
+                recalculate(newPixels, HORIZONTAL);
+            }
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
             Seam seam = horizontalSeams[horizontalSeam];
-            newPixels = recalculate(removeHorizontalSeam(seam, newPixels), HORIZONTAL);
+            newPixels = removeHorizontalSeam(seam, newPixels);
+            if (horizontalSeam < this.horizontalSeams.length - 1)
+            {
+                // simply recalculate horizontal energies
+                recalculate(newPixels, HORIZONTAL);
+            }
+            // else do nothing as it is unnecessary to recalculate the last energy in the for loop
         }
         return newPixels;
     }
@@ -61,7 +77,8 @@ public class SeamCalculator
                 energyCalculator.calculateHorizontalEnergy();
                 break;
             default:
-                // do nothing
+                energyCalculator.calculateVerticalEnergy();
+                energyCalculator.calculateHorizontalEnergy();
                 break;
         }
 
