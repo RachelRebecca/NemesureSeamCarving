@@ -1,5 +1,7 @@
 package seam;
 
+import static seam.Orientation.*;
+
 public class SeamCalculator
 {
     private final Pixel[][] pixels;
@@ -14,15 +16,15 @@ public class SeamCalculator
     {
         this.pixels = pixels;
 
-        int numColsInSeam = imageWidth - newImageWidth;
+        int numRowsInSeam = imageWidth - newImageWidth;
 
-        int numRowsInSeam = imageHeight - newImageHeight;
+        int numColsInSeam = imageHeight - newImageHeight;
 
         // x -> width, y -> height
         // vertical seam: y is implicit, x is implicit, must specify width
-        this.verticalSeams = new Seam[Math.abs(numColsInSeam)];
+        this.verticalSeams = new Seam[Math.abs(numRowsInSeam)];
         // horizontal seam: x is implicit, y is explicit, must specify height
-        this.horizontalSeams = new Seam[Math.abs(numRowsInSeam)];
+        this.horizontalSeams = new Seam[Math.abs(numColsInSeam)];
     }
 
     public Pixel[][] calculateAndRemoveSeams()
@@ -31,116 +33,95 @@ public class SeamCalculator
         for (int verticalSeam = 0; verticalSeam < this.verticalSeams.length; verticalSeam++)
         {
             verticalSeams[verticalSeam] = calculateVerticalSeam(newPixels);
-            newPixels = removeVerticalSeam(verticalSeams[verticalSeam], newPixels);
+            Seam seam = verticalSeams[verticalSeam];
+            newPixels = removeVerticalSeam(seam, newPixels);
+            if (verticalSeam < this.verticalSeams.length - 1)
+            {
+                // simply recalculate vertical energies
+                recalculate(newPixels, VERTICAL);
+            } else
+            {
+                // recalculate horizontal in preparation for the horizontal seam for loop
+                recalculate(newPixels, HORIZONTAL);
+            }
         }
         for (int horizontalSeam = 0; horizontalSeam < this.horizontalSeams.length; horizontalSeam++)
         {
             horizontalSeams[horizontalSeam] = calculateHorizontalSeam(newPixels);
-            newPixels = removeHorizontalSeam(horizontalSeams[horizontalSeam], newPixels);
+            Seam seam = horizontalSeams[horizontalSeam];
+            newPixels = removeHorizontalSeam(seam, newPixels);
+            if (horizontalSeam < this.horizontalSeams.length - 1)
+            {
+                // simply recalculate horizontal energies
+                recalculate(newPixels, HORIZONTAL);
+            }
+            // else do nothing as it is unnecessary to recalculate the last energy in the for loop
         }
         return newPixels;
     }
 
-    public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
+    private Pixel[][] recalculate(Pixel[][] pixels, Orientation orientation)
     {
-        int width = pixels.length - 1;
-        int height = pixels[0].length;
-        Pixel[][] newPixels = new Pixel[width][height];
+        EnergyCalculator energyCalculator = new EnergyCalculator(pixels);
 
-        for (int y = 0; y < height; y++)
+        // recalculate energy values
+        energyCalculator.calculateEnergy();
+
+        switch (orientation)
         {
-            for (int x = 0, pixelX = 0; x < width; x++, pixelX++)
-            {
-                if (x == seam.getSeam(y))
-                {
-                    pixelX++;
-                }
-                if (pixelX <= pixels.length - 1)
-                {
-                    newPixels[x][y] = pixels[pixelX][y];
-                }
-            }
+            case VERTICAL:
+                energyCalculator.calculateVerticalEnergy();
+                break;
+            case HORIZONTAL:
+                energyCalculator.calculateHorizontalEnergy();
+                break;
+            default:
+                energyCalculator.calculateVerticalEnergy();
+                energyCalculator.calculateHorizontalEnergy();
+                break;
         }
 
-        return newPixels;
-    }
+        return pixels;
 
-    public Pixel[][] removeHorizontalSeam(Seam seam, Pixel[][] pixels)
-    {
-        int width = pixels.length;
-        int height = pixels[0].length - 1;
-        Pixel[][] newPixels = new Pixel[width][height];
-
-        // replace all seam elements with null
-        for (int x = 0; x < pixels.length; x++)
-        {
-            for (int y = 0; y < pixels[0].length; y++)
-            {
-                if (y == seam.getSeam(x))
-                {
-                    pixels[x][y] = null;
-                }
-            }
-        }
-
-        // move all pixels up one row
-        for (int y = 1; y < pixels[0].length; y++)
-        {
-            for (int x = 0; x < pixels.length; x++)
-            {
-                if (pixels[x][y - 1] == null)
-                {
-                    pixels[x][y - 1] = pixels[x][y];
-                    pixels[x][y] = null;
-                }
-            }
-        }
-
-        // set newPixels = pixels all the way until the last row
-        for (int x = 0; x < pixels.length; x++)
-        {
-            for (int y = 0; y < pixels[0].length - 1; y++)
-            {
-                newPixels[x][y] = pixels[x][y];
-            }
-        }
-
-        return newPixels;
     }
 
     public Seam calculateVerticalSeam(Pixel[][] pixels)
     {
-        Seam seam = new Seam(pixels[0].length);
+        int numRows = pixels.length;
+        int numCols = pixels[0].length;
+        int bottomRow = pixels.length - 1;
+
+        Seam seam = new Seam(numRows);
 
         int smallestIndex = 0;
-        for (int col = 0; col < pixels.length; col++)
+        for (int col = 0; col < numCols; col++)
         {
-            if (pixels[col][pixels[0].length - 1].getVerticalEnergy()
-                    < pixels[smallestIndex][pixels[0].length - 1].getVerticalEnergy())
+            if (pixels[bottomRow][col].getVerticalEnergy()
+                    < pixels[bottomRow][smallestIndex].getVerticalEnergy())
             {
                 smallestIndex = col;
             }
         }
 
         // add to last position the col of the last row
-        seam.addNewValue(pixels[0].length - 1, smallestIndex);
+        seam.addNewValue(bottomRow, smallestIndex);
 
-        int row = pixels[0].length - 2;
+        int row = numRows - 2;
         while (row >= 0)
         {
             // keep building seam
             double topA = 255 * 255 * 255;
             if (smallestIndex - 1 >= 0)
             {
-                topA = pixels[smallestIndex - 1][row].getVerticalEnergy();
+                topA = pixels[row][smallestIndex - 1].getVerticalEnergy();
             }
 
-            double topB = pixels[smallestIndex][row].getVerticalEnergy();
+            double topB = pixels[row][smallestIndex].getVerticalEnergy();
 
             double topC = 255 * 255 * 255;
-            if (smallestIndex + 1 < pixels.length)
+            if (smallestIndex + 1 < numCols)
             {
-                topC = pixels[smallestIndex + 1][row].getVerticalEnergy();
+                topC = pixels[row][smallestIndex + 1].getVerticalEnergy();
             }
 
             if (topA < topB && topA < topC)
@@ -157,39 +138,67 @@ public class SeamCalculator
         return seam;
     }
 
-    public Seam calculateHorizontalSeam(Pixel[][] pixels)
+    public Pixel[][] removeVerticalSeam(Seam seam, Pixel[][] pixels)
     {
-        Seam seam = new Seam(pixels.length);
+        int numRows = pixels.length;
+        int numCols = pixels[0].length - 1;
+        Pixel[][] newPixels = new Pixel[numRows][numCols];
 
-        int smallestIndex = 0;
-        for (int row = 0; row < pixels[0].length; row++)
+        for (int row = 0; row < numRows; row++)
         {
-            if (pixels[pixels.length - 1][row].getHorizontalEnergy()
-                    < pixels[pixels.length - 1][smallestIndex].getHorizontalEnergy())
+            for (int col = 0, pixelCol = 0; col < numCols; col++, pixelCol++)
             {
-                smallestIndex = row;
+                if (col == seam.getSeam(row))
+                {
+                    pixelCol++;
+                }
+                if (pixelCol <= numCols)
+                {
+                    newPixels[row][col] = pixels[row][pixelCol];
+                }
             }
         }
 
-        // add to last position the row of the last col
-        seam.addNewValue(pixels.length - 1, smallestIndex);
+        return newPixels;
+    }
 
-        int col = pixels.length - 2;
+    public Seam calculateHorizontalSeam(Pixel[][] pixels)
+    {
+        int numRows = pixels.length;
+        int numCols = pixels[0].length;
+        int rightCol = pixels[0].length - 1;
+        Seam seam = new Seam(numCols);
+
+        int smallestIndex = 0;
+        for (int row = 0; row < numRows; row++)
+        {
+            if (pixels[row][rightCol].getHorizontalEnergy()
+                    < pixels[smallestIndex][rightCol].getHorizontalEnergy())
+            {
+                smallestIndex = row;
+            }
+
+        }
+
+        // add to last position the row of the last col
+        seam.addNewValue(rightCol, smallestIndex);
+
+        int col = numCols - 2;
         while (col >= 0)
         {
             // keep building seam
             double leftA = 255 * 255 * 255;
             if (smallestIndex - 1 >= 0)
             {
-                leftA = pixels[col][smallestIndex - 1].getHorizontalEnergy();
+                leftA = pixels[smallestIndex - 1][col].getHorizontalEnergy();
             }
 
-            double leftB = pixels[col][smallestIndex].getHorizontalEnergy();
+            double leftB = pixels[smallestIndex][col].getHorizontalEnergy();
 
             double leftC = 255 * 255 * 255;
-            if (smallestIndex + 1 < pixels[0].length)
+            if (smallestIndex + 1 < numRows)
             {
-                leftC = pixels[col][smallestIndex + 1].getHorizontalEnergy();
+                leftC = pixels[smallestIndex + 1][col].getHorizontalEnergy();
             }
 
             if (leftA < leftB && leftA < leftC)
@@ -204,5 +213,29 @@ public class SeamCalculator
         }
 
         return seam;
+    }
+
+    public Pixel[][] removeHorizontalSeam(Seam seam, Pixel[][] pixels)
+    {
+        int numRows = pixels.length - 1;
+        int numCols = pixels[0].length;
+        Pixel[][] newPixels = new Pixel[numRows][numCols];
+
+        for (int col = 0; col < numCols; col++)
+        {
+            for (int row = 0, pixelRow = 0; row < numRows; row++, pixelRow++)
+            {
+                if (row == seam.getSeam(col))
+                {
+                    pixelRow++;
+                }
+                if (pixelRow <= numRows)
+                {
+                    newPixels[row][col] = pixels[pixelRow][col];
+                }
+            }
+        }
+
+        return newPixels;
     }
 }

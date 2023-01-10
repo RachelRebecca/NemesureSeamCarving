@@ -5,28 +5,24 @@ import java.awt.*;
 public class EnergyCalculator
 {
     private final Pixel[][] pixels;
-    private final int imageWidth;
-    private final int imageHeight;
     double maxEnergy = 0;
     double minEnergy = 255 * 255 * 6;
 
-    public EnergyCalculator(Pixel[][] pixels, int imageWidth, int imageHeight)
+    public EnergyCalculator(Pixel[][] pixels)
     {
         this.pixels = pixels;
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
     }
 
     public void calculateEnergy()
     {
-        for (int col = 1; col < imageWidth - 1; col++)
+        for (int row = 1; row < pixels.length - 1; row++)
         {
-            for (int row = 1; row < imageHeight - 1; row++)
+            for (int col = 1; col < pixels[0].length - 1; col++)
             {
-                Color top = (pixels[col][row - 1]).getColor();
-                Color bottom = (pixels[col][row + 1]).getColor();
-                Color left = (pixels[col - 1][row]).getColor();
-                Color right = (pixels[col + 1][row]).getColor();
+                Color top = (pixels[row - 1][col]).getColor();
+                Color bottom = (pixels[row + 1][col]).getColor();
+                Color left = (pixels[row][col - 1]).getColor();
+                Color right = (pixels[row][col + 1]).getColor();
 
                 double energy = ((top.getRed() - bottom.getRed())
                         * (top.getRed() - bottom.getRed()))
@@ -41,16 +37,10 @@ public class EnergyCalculator
                         + ((left.getBlue() - right.getBlue())
                         * (left.getBlue() - right.getBlue()));
 
-                pixels[col][row].setEnergy(energy);
+                pixels[row][col].setEnergy(energy);
 
-                if (energy < minEnergy)
-                {
-                    minEnergy = energy;
-                }
-                if (energy > maxEnergy)
-                {
-                    maxEnergy = energy;
-                }
+                minEnergy = Math.min(energy, minEnergy);
+                maxEnergy = Math.max(energy, maxEnergy);
             }
         }
     }
@@ -58,31 +48,32 @@ public class EnergyCalculator
     public void calculateVerticalEnergy()
     {
         // top row case
-        for (int col = 0; col < imageWidth; col++)
+        int numCols = pixels[0].length;
+        for (int col = 0; col < numCols; col++)
         {
-            pixels[col][0].setVerticalEnergy(pixels[col][0].getEnergy());
+            pixels[0][col].setVerticalEnergy(pixels[0][col].getEnergy());
         }
 
         // all other cases
-        for (int row = 1; row < imageHeight; row++)
+        for (int row = 1; row < pixels.length; row++)
         {
-            for (int col = 0; col < imageWidth; col++)
+            for (int col = 0; col < pixels[0].length; col++)
             {
-                Pixel currPixel = pixels[col][row];
+                Pixel currPixel = pixels[row][col];
 
                 double theoreticalMax = 255 * 255 * 255;
                 double topPixelEnergyA = theoreticalMax;
                 if (col - 1 >= 0)
                 {
-                    topPixelEnergyA = pixels[col - 1][row - 1].getVerticalEnergy();
+                    topPixelEnergyA = pixels[row - 1][col - 1].getVerticalEnergy();
                 }
 
-                double topPixelEnergyB = pixels[col][row - 1].getVerticalEnergy();
+                double topPixelEnergyB = pixels[row - 1][col].getVerticalEnergy();
 
                 double topPixelEnergyC = theoreticalMax;
-                if (col + 1 < imageWidth)
+                if (col + 1 < numCols)
                 {
-                    topPixelEnergyC = pixels[col + 1][row - 1].getVerticalEnergy();
+                    topPixelEnergyC = pixels[row - 1][col + 1].getVerticalEnergy();
                 }
 
                 double verticalEnergy = Math.min(topPixelEnergyA,
@@ -98,35 +89,36 @@ public class EnergyCalculator
     public void calculateHorizontalEnergy()
     {
         // left side case
-        for (int row = 0; row < imageHeight; row++)
+        int numRows = pixels.length;
+        for (int row = 0; row < numRows; row++)
         {
-            pixels[0][row].setHorizontalEnergy(pixels[0][row].getEnergy());
+            pixels[row][0].setHorizontalEnergy(pixels[row][0].getEnergy());
         }
 
         // all other cases
-        for (int col = 1; col < imageWidth; col++)
+
+        for (int row = 0; row < numRows; row++)
         {
-            for (int row = 0; row < imageHeight; row++)
+            for (int col = 1; col < pixels[0].length; col++)
             {
-                Pixel currPixel = pixels[col][row];
+                Pixel currPixel = pixels[row][col];
 
                 double theoreticalMax = 255 * 255 * 255;
                 double leftPixelA = theoreticalMax;
                 if (row - 1 >= 0)
                 {
-                    leftPixelA = pixels[col - 1][row - 1].getHorizontalEnergy();
+                    leftPixelA = pixels[row - 1][col - 1].getHorizontalEnergy();
                 }
 
-                double leftPixelB = pixels[col - 1][row].getHorizontalEnergy();
+                double leftPixelB = pixels[row][col - 1].getHorizontalEnergy();
 
                 double leftPixelC = theoreticalMax;
-                if (row + 1 < imageHeight)
+                if (row + 1 < numRows)
                 {
-                    leftPixelC = pixels[col - 1][row + 1].getHorizontalEnergy();
+                    leftPixelC = pixels[row + 1][col - 1].getHorizontalEnergy();
                 }
 
                 double horizontalEnergy = Math.min(leftPixelA, Math.min(leftPixelB, leftPixelC));
-
 
                 horizontalEnergy += currPixel.getEnergy();
                 currPixel.setHorizontalEnergy(horizontalEnergy);

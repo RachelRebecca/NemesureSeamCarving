@@ -9,6 +9,11 @@ public class Seam
         this.seam = new int[seamLength];
     }
 
+    public Seam(int[] seam)
+    {
+        this.seam = seam;
+    }
+
     public int getSeam(int index)
     {
         return this.seam[index];
